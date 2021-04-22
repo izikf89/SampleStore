@@ -9,7 +9,18 @@
         integrity="sha384-JEW9xMcG8R+pH31jmWH6WWP0WintQrMb4s7ZOdauHnUtxwoG2vI5DkLtS3qm9Ekf"
         crossorigin="anonymous"></script>
     <style>
-        .header.navbar {
+        html,
+        body {
+            height: 100%;
+            margin: 0;
+        }
+
+        .wrapper {
+            min-height: 100%;
+            margin-bottom: -142px;
+        }
+
+        .navbar {
             background-color: #F6EDD6 !important;
         }
 
@@ -18,39 +29,55 @@
         }
 
 
-        .header.navbar-light .navbar-nav .nav-link {
+        .navbar-light .navbar-nav .nav-link {
             color: rgb(67 50 34);
             font-size: 20px;
             font-weight: 600;
             width: 196px;
             text-align: center;
-            height: 100px;
-            line-height: 100px;
+            height: 127px;
+            line-height: 127px;
+        }
+
+        
+        .footer.navbar-light .navbar-nav .nav-link {
+            height: 110px;
+            line-height: 110px;
         }
     </style>
 </head>
 
 <body dir="rtl">
-    <nav class="header navbar navbar-expand-lg navbar-light bg-light">
+    <div class="wrapper">
+        <nav class="header navbar navbar-expand-lg navbar-light bg-light">
+            <div class="container-fluid">
+                <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                    <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                        <li class="nav-item"><img class="logo" src="./assets/logo.png"></li>
+                        <li class="nav-item"><a class="nav-link" href=''>קטגוריות</a></li>
+                        <li class="nav-item"><a class="nav-link" href=''>מידע חשוב</a></li>
+                        <li class="nav-item"><a class="nav-link" href=''>סל קניות</a></li>
+                        <li class="nav-item"><a class="nav-link" href=''>חזרה לדף הבית</a></li>
+                        <li class="nav-item"><a class="nav-link" href=''>הרשמה / התחברות</a></li>
+                    </ul>
+                </div>
+            </div>
+        </nav>
+
+        <!-- <div class="middle-div"></div> -->
+    </div>
+
+    <nav class="footer navbar navbar-expand-lg navbar-light bg-light mt-auto py-3">
         <div class="container-fluid">
             <div class="collapse navbar-collapse" id="navbarSupportedContent">
                 <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-                    <li class="nav-item"><img class="logo" src="./assets/logo.png"></li>
-                    <li class="nav-item"><a class="nav-link" href=''>קטגוריות</a></li>
-                    <li class="nav-item"><a class="nav-link" href=''>מידע חשוב</a></li>
-                    <li class="nav-item"><a class="nav-link" href=''>סל קניות</a></li>
-                    <li class="nav-item"><a class="nav-link" href=''>חזרה לדף הבית</a></li>
-                    <li class="nav-item"><a class="nav-link" href=''>הרשמה / התחברות</a></li>
+                    <li class="nav-item"><a class="nav-link" href=''>אודות</a></li>
+                    <li class="nav-item"><a class="nav-link" href=''>צור קשר</a></li>
+                    <li class="nav-item"><a class="nav-link" href=''>משלוחים</a></li>
                 </ul>
             </div>
         </div>
     </nav>
-
-    <footer class="footer mt-auto py-3 bg-light">
-        <div class="container">
-          <span class="text-muted">Place sticky footer content here.</span>
-        </div>
-      </footer>
 </body>
 
 </html>

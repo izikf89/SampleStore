@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Zofia</title>
+    <style>
+        div {
+            background-color: rgb(98, 0, 128);
+        }
+
+        #dropdown {
+            direction: rtl;
+            font-size: 49px;
+            color: thistle;
+            text-align: 80px;
+        }
+
+        div a {
+            direction: rtl;
+            text-decoration: none;
+            color: white;
+            font-size: 20px;
+            padding: 15px;
+            display: inline-block;
+            background-position: center;
+        }
+
+        ul {
+            display: inline;
+            margin: 0;
+            padding: 0;
+        }
+
+        ul li {
+            display: inline-block;
+        }
+
+        ul li:hover {
+            background: #555;
+        }
+
+        ul li:hover ul {
+            display: block;
+        }
+
+        ul li ul {
+            position: absolute;
+            width: 200px;
+            display: none;
+        }
+
+        ul li ul li {
+            background: #555;
+            display: block;
+        }
+
+        ul li ul li a {
+            display: block !important;
+        }
+
+        ul li ul li:hover {
+            background: #666;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div>
+        <div id="dropdown" href="#" style="text-align: 250px;">Home</a>
+            <ul>
+                <li>
+                    <a href="#">Dropdown Link</a>
+                    <ul>
+                        <li><a href="#">Link 1</a></li>
+                        <li><a href="#">Link 2</a></li>
+                        <li><a href="#">Link 3</a></li>
+                    </ul>
+                </li>
+                <li>
+                    <a href="#">Dropdown Link</a>
+                    <ul>
+                        <li><a href="#">Link 1</a></li>
+                        <li><a href="#">Link 2</a></li>
+                        <li><a href="#">Link 3</a></li>
+                    </ul>
+                </li>
+                <li>
+                    <a href="#">Dropdown Link</a>
+                    <ul>
+                        <li><a href="#">Link 1</a></li>
+                        <li><a href="#">Link 2</a></li>
+                        <li><a href="#">Link 3</a></li>
+                    </ul>
+                </li>
+            </ul>
+        </div>
+
+</body>
+
+</html>

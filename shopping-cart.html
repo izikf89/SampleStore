@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>עגלת קניות</title>
+</head>
+<body>
+    <div class="shopping-cart">
+        <div class="title">עגלת קניות</div>
+        <div class="shopping-cart-items">
+            <div class="shopping-cart-item">
+                <img class="item-image" src="./assets/cake1.jpeg">
+                <div class="item-name">שם מוצר</div>
+                <input type="number" class="item-amount" min="0" value="2">
+                <div class="item-price">מחיר</div>
+            </div>
+            <div class="shopping-cart-item">
+                <img class="item-image" src="./assets/cake2.jpeg">
+                <div class="item-name">שם מוצר</div>
+                <input type="number" class="item-amount" min="0" value="1">
+                <div class="item-price">מחיר</div>
+            </div>
+            <div class="shopping-cart-item">
+                <img class="item-image" src="./assets/cake3.jpeg">
+                <div class="item-name">שם מוצר</div>
+                <input type="number" class="item-amount" min="0" value="1">
+                <div class="item-price">מחיר</div>
+            </div>
+        </div>
+        <div class="summery">
+            <div class="total-payment">סהכ לתשלום</div>
+            <div class="total-items">4</div>
+            <div class="end-order">סיום הזמנה</div>
+        </div>
+    </div>
+    
+    <style>
+        body {
+            padding: 0;
+            margin: 0;
+            height: 100vh;
+        }
+
+        .shopping-cart {
+            width: 100%;
+            height: 100%;
+            direction: rtl;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            cursor: default;
+        }
+
+        .shopping-cart .title {
+            font-size: 30px;
+            font-weight: bold;
+            margin: 40px 0;
+        }
+
+        .shopping-cart .shopping-cart-items {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .shopping-cart .shopping-cart-items .shopping-cart-item {
+            display: flex;
+            align-items: center;
+            width: 100%;
+            height: 100px;
+            margin: 10px 0;
+        }
+
+        .shopping-cart .shopping-cart-items .shopping-cart-item .item-image {
+            height: 100%;
+            margin-left: 20px;
+        }
+
+        .shopping-cart .shopping-cart-items .shopping-cart-item .item-name {
+            width: 200px;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: 1px solid rgb(172, 160, 160);
+            border-radius: 15px;
+            margin-left: 20px;
+        }
+
+        .shopping-cart .shopping-cart-items .shopping-cart-item .item-amount {
+            width: 100px;
+            height: 100%;
+            border: 1px solid rgb(172, 160, 160);
+            border-radius: 15px;
+            outline: none;
+            box-sizing: border-box;
+            padding: 10px;
+            margin-left: 20px;
+        }
+
+        .shopping-cart .shopping-cart-items .shopping-cart-item .item-amount::-webkit-inner-spin-button {
+            float: left;
+            opacity: 1;
+            width: 30px;
+            height: 50px;
+            background-color: red;
+        }
+
+        .shopping-cart .shopping-cart-items .shopping-cart-item .item-price {
+            width: 100px;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: 1px solid rgb(172, 160, 160);
+            border-radius: 15px;
+        }
+
+        .shopping-cart .summery {
+            display: flex;
+        }
+
+        .shopping-cart .summery .total-payment {
+            text-align: center;
+            line-height: 50px;
+            height: 50px;
+            width: 325px;
+            border: 1px solid rgb(172, 160, 160);
+            border-radius: 15px;
+            margin-left: 30px;
+        }
+
+        .shopping-cart .summery .total-items {
+            text-align: center;
+            line-height: 50px;
+            height: 50px;
+            width: 70px;
+            border: 1px solid rgb(172, 160, 160);
+            border-radius: 15px;
+            margin-left: 25px;
+        }
+
+        .shopping-cart .summery .end-order {
+            margin-right: 10px;
+            text-align: center;
+            line-height: 50px;
+            width: 100px;
+            height: 50px;
+            color: #ffffff;
+            background-color: #07a3fd;
+            border: 1px solid #0266b8;
+            border-radius: 20px;
+            cursor: pointer;
+        }
+    </style>
+</body>
+</html>

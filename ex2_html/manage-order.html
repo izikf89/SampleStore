@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ניהול הזמנה מספר 1</title>
+</head>
+<body>
+    <div class="manage-order">
+        <div class="title">ניהול הזמנה מספר 1</div>
+        <div class="items">
+            <div class="item">
+                <img class="item-image" src="./assets/cake1.jpeg">
+                <div class="item-name">שם מוצר</div>
+                <div class="item-amount">2</div>
+                <div class="item-price">מחיר</div>
+            </div>
+            <div class="item">
+                <img class="item-image" src="./assets/cake2.jpeg">
+                <div class="item-name">שם מוצר</div>
+                <div class="item-amount">1</div>
+                <div class="item-price">מחיר</div>
+            </div>
+            <div class="item">
+                <img class="item-image" src="./assets/cake3.jpeg">
+                <div class="item-name">שם מוצר</div>
+                <div class="item-amount">1</div>
+                <div class="item-price">מחיר</div>
+            </div>
+        </div>
+        <div class="summery">
+            <div class="total-payment">סהכ לתשלום</div>
+            <div class="total-items">4</div>
+        </div>
+        <div class="client-info">
+            <div class="title">פרטי לקוח</div>
+            <div class="info">
+                <div class="client-name">ישראל ישראלי</div>
+                <div class="client-phone">000-0000000</div>
+                <div class="client-mail">israel.israeli@gmail.com</div>
+            </div>
+        </div>
+    </div>
+    <style>
+        body {
+            padding: 0;
+            margin: 0;
+            height: 100vh;
+        }
+
+        .manage-order {
+            width: 100%;
+            height: 100%;
+            direction: rtl;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            cursor: default;
+        }
+
+        .manage-order .title {
+            font-size: 30px;
+            font-weight: bold;
+            margin: 40px 0;
+        }
+
+        .manage-order .items {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .manage-order .items .item {
+            display: flex;
+            align-items: center;
+            width: 100%;
+            height: 100px;
+            margin: 10px 0;
+        }
+
+        .manage-order .items .item .item-image {
+            height: 100%;
+            margin-left: 20px;
+        }
+
+        .manage-order .items .item .item-name {
+            width: 200px;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: 1px solid rgb(172, 160, 160);
+            border-radius: 7px;
+            margin-left: 20px;
+        }
+
+        .manage-order .items .item .item-amount {
+            width: 100px;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: 1px solid rgb(172, 160, 160);
+            border-radius: 7px;
+            outline: none;
+            box-sizing: border-box;
+            padding: 10px;
+            margin-left: 20px;
+        }
+
+        .manage-order .items .item .item-price {
+            width: 100px;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: 1px solid rgb(172, 160, 160);
+            border-radius: 7px;
+        }
+
+        .manage-order .summery {
+            display: flex;
+            width: 565px;
+        }
+
+        .manage-order .summery .total-payment {
+            text-align: center;
+            line-height: 50px;
+            height: 50px;
+            flex: 3;
+            border: 1px solid rgb(172, 160, 160);
+            border-radius: 7px;
+            margin-left: 30px;
+        }
+
+        .manage-order .summery .total-items {
+            text-align: center;
+            line-height: 50px;
+            height: 50px;
+            flex: 1;
+            border: 1px solid rgb(172, 160, 160);
+            border-radius: 7px;
+            margin-bottom: 30px;
+        }
+
+        .manage-order .client-info {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            width: 700px;
+            border: 1px solid rgb(172, 160, 160);
+            border-radius: 7px;
+        }
+
+        .manage-order .client-info .title {
+            font-size: 25px;
+            font-weight: bold;
+            margin: 15px 0;
+        }
+
+        .manage-order .client-info .info {
+            width: 100%;
+            display: flex;
+            justify-content: space-evenly;
+        }
+
+        .manage-order .client-info :is(.client-name, .client-mail, .client-phone) {
+            flex-basis: 200px;
+            height: 30px;
+            line-height: 30px;
+            border: 1px solid rgb(172, 160, 160);
+            border-radius: 7px;
+            text-align: center;
+            margin-bottom: 10px;
+        }
+    </style>
+</body>
+</html>

@@ -1,7 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Claims;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
@@ -10,6 +14,7 @@ using WebApplication2.Models;
 
 namespace WebApplication2.Controllers
 {
+    [Authorize(Roles = nameof(TypeUser.admin))]
     public class UsersController : Controller
     {
         private readonly WebApplication2Context _context;
@@ -43,27 +48,29 @@ namespace WebApplication2.Controllers
             return View(user);
         }
 
-        // GET: Users/Create
-        public IActionResult Create()
-        {
-            return View();
-        }
 
-        // POST: Users/Create
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,name,Password,type")] User user)
-        {
-            if (ModelState.IsValid)
-            {
-                _context.Add(user);
-                await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
-            }
-            return View(user);
-        }
+
+        //// GET: Users/Create
+        //public IActionResult Create()
+        //{
+        //    return View();
+        //}
+
+        //// POST: Users/Create
+        //// To protect from overposting attacks, enable the specific properties you want to bind to.
+        //// For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
+        //[HttpPost]
+        //[ValidateAntiForgeryToken]
+        //public async Task<IActionResult> Create([Bind("Id,Name,Password,Type")] User user)
+        //{
+        //    if (ModelState.IsValid)
+        //    {
+        //        _context.Add(user);
+        //        await _context.SaveChangesAsync();
+        //        return RedirectToAction(nameof(Index));
+        //    }
+        //    return View(user);
+        //}
 
         // GET: Users/Edit/5
         public async Task<IActionResult> Edit(int? id)
@@ -86,7 +93,7 @@ namespace WebApplication2.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,name,Password,type")] User user)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,Name,Password,Type")] User user)
         {
             if (id != user.Id)
             {

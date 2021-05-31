@@ -10,22 +10,22 @@ using WebApplication2.Models;
 
 namespace WebApplication2.Controllers
 {
-    public class ProdactsController : Controller
+    public class ProductsController : Controller
     {
         private readonly WebApplication2Context _context;
 
-        public ProdactsController(WebApplication2Context context)
+        public ProductsController(WebApplication2Context context)
         {
             _context = context;
         }
 
-        // GET: Prodacts
+        // GET: Products
         public async Task<IActionResult> Index()
         {
             return View(await _context.Prodact.ToListAsync());
         }
 
-        // GET: Prodacts/Details/5
+        // GET: Products/Details/5
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null)
@@ -33,39 +33,39 @@ namespace WebApplication2.Controllers
                 return NotFound();
             }
 
-            var prodact = await _context.Prodact
-                .FirstOrDefaultAsync(m => m.ProductId == id);
-            if (prodact == null)
+            var product = await _context.Prodact
+                .FirstOrDefaultAsync(m => m.Id == id);
+            if (product == null)
             {
                 return NotFound();
             }
 
-            return View(prodact);
+            return View(product);
         }
 
-        // GET: Prodacts/Create
+        // GET: Products/Create
         public IActionResult Create()
         {
             return View();
         }
 
-        // POST: Prodacts/Create
+        // POST: Products/Create
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("ProductId,Name,Price")] Prodact prodact)
+        public async Task<IActionResult> Create([Bind("Id,Name,Price")] Product product)
         {
             if (ModelState.IsValid)
             {
-                _context.Add(prodact);
+                _context.Add(product);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            return View(prodact);
+            return View(product);
         }
 
-        // GET: Prodacts/Edit/5
+        // GET: Products/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -73,22 +73,22 @@ namespace WebApplication2.Controllers
                 return NotFound();
             }
 
-            var prodact = await _context.Prodact.FindAsync(id);
-            if (prodact == null)
+            var product = await _context.Prodact.FindAsync(id);
+            if (product == null)
             {
                 return NotFound();
             }
-            return View(prodact);
+            return View(product);
         }
 
-        // POST: Prodacts/Edit/5
+        // POST: Products/Edit/5
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("ProductId,Name,Price")] Prodact prodact)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,Name,Price")] Product product)
         {
-            if (id != prodact.ProductId)
+            if (id != product.Id)
             {
                 return NotFound();
             }
@@ -97,12 +97,12 @@ namespace WebApplication2.Controllers
             {
                 try
                 {
-                    _context.Update(prodact);
+                    _context.Update(product);
                     await _context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!ProdactExists(prodact.ProductId))
+                    if (!ProductExists(product.Id))
                     {
                         return NotFound();
                     }
@@ -113,10 +113,10 @@ namespace WebApplication2.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            return View(prodact);
+            return View(product);
         }
 
-        // GET: Prodacts/Delete/5
+        // GET: Products/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
@@ -124,30 +124,30 @@ namespace WebApplication2.Controllers
                 return NotFound();
             }
 
-            var prodact = await _context.Prodact
-                .FirstOrDefaultAsync(m => m.ProductId == id);
-            if (prodact == null)
+            var product = await _context.Prodact
+                .FirstOrDefaultAsync(m => m.Id == id);
+            if (product == null)
             {
                 return NotFound();
             }
 
-            return View(prodact);
+            return View(product);
         }
 
-        // POST: Prodacts/Delete/5
+        // POST: Products/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var prodact = await _context.Prodact.FindAsync(id);
-            _context.Prodact.Remove(prodact);
+            var product = await _context.Prodact.FindAsync(id);
+            _context.Prodact.Remove(product);
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
 
-        private bool ProdactExists(int id)
+        private bool ProductExists(int id)
         {
-            return _context.Prodact.Any(e => e.ProductId == id);
+            return _context.Prodact.Any(e => e.Id == id);
         }
     }
 }

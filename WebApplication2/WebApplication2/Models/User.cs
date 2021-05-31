@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
@@ -10,15 +11,21 @@ namespace WebApplication2.Models
 
     public class User
     {
-        [Required, Key]
+        [Required]
         public int Id { get; set; }
 
-        public string name { get; set; }
+        [Required]
+        [DisplayName("שם")]
+        public string Name { get; set; }
 
+        [Required]
+        [DisplayName("סיסמא")]
         [DataType(DataType.Password)]
-        public string Password { get; set; }        
+        public string Password { get; set; }
 
-        public TypeUser type { get; set; }
+        [DisplayName("סוג")]
+        public TypeUser Type { get; set; } = TypeUser.client;
+
         //public Client Client { get; set; }// O2O
     }
 }

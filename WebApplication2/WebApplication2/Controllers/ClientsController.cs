@@ -1,7 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Claims;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
@@ -18,6 +21,127 @@ namespace WebApplication2.Controllers
         {
             _context = context;
         }
+
+
+
+        public IActionResult Login()
+        {
+            return View();
+        }
+
+
+
+        // POST: Users/Create
+        // To protect from overposting attacks, enable the specific properties you want to bind to.
+        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Login([Bind("Name,Password")] User user)
+        {
+            var q = from a in _context.User
+                    where a.Name == user.Name && a.Password == user.Password
+                    select a;
+
+            if (q.Count() > 0)
+            {
+                User a = q.First();
+                user.Type = q.First().Type;
+                Signin(user);
+                //HttpContext.Session.SetString("user", q.First().Name);
+                return RedirectToAction(nameof(Index), "Home");
+            }
+            else
+            {
+                ViewBag.error = "Name or password not correct!";
+            }
+
+            //if (ModelState.IsValid)
+            //{
+            //    _context.Add(user);
+            //    await _context.SaveChangesAsync();
+            //}
+            return View(user);
+        }
+
+
+        private async void Signin(User user)
+        {
+            var claims = new List<Claim>
+                {
+                    new Claim(ClaimTypes.Name, user.Name),
+                    new Claim(ClaimTypes.Role, user.Type.ToString()),
+                };
+
+            var claimsIdentity = new ClaimsIdentity(
+                claims, CookieAuthenticationDefaults.AuthenticationScheme);
+
+            var authProperties = new AuthenticationProperties
+            {
+                ExpiresUtc = DateTimeOffset.UtcNow.AddMinutes(10)
+            };
+
+            await HttpContext.SignInAsync(
+                CookieAuthenticationDefaults.AuthenticationScheme,
+                new ClaimsPrincipal(claimsIdentity),
+                authProperties);
+        }
+
+
+        public async Task<IActionResult> Logout()
+        {
+            await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme).ConfigureAwait(false);
+
+            return RedirectToAction(nameof(Index), "Home");
+        }
+
+
+
+
+
+        public IActionResult Register()
+        {
+            return View();
+        }
+
+
+
+        // POST: Users/Create
+        // To protect from overposting attacks, enable the specific properties you want to bind to.
+        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Register([Bind("Telephone,E_Mail,Id,Name,Password,Type")] Client client)
+
+        {
+            var q = from a in _context.Client
+                    where a.Name == client.Name
+                    select a;
+
+            if (q.Count() > 0)
+            {
+                ViewBag.error = "Name alredy exist!";
+                //HttpContext.Session.SetString("user", q.First().Name);
+                
+            }
+            else
+            {
+                _context.Add(client);
+                await _context.SaveChangesAsync();
+
+                Signin(client);
+                //HttpContext.Session.SetString("user", q.First().Name);
+                return RedirectToAction(nameof(Index), nameof(HomeController));
+
+
+            }
+
+            //if (ModelState.IsValid)
+            //{
+            //}
+            return View(client);
+        }
+
+
 
         // GET: Clients
         public async Task<IActionResult> Index()
@@ -54,7 +178,7 @@ namespace WebApplication2.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("FirstName,LastName,Telephone,E_Mail,Id,name,Password,type")] Client client)
+        public async Task<IActionResult> Create([Bind("Telephone,E_Mail,Id,Name,Password,Type")] Client client)
         {
             if (ModelState.IsValid)
             {
@@ -86,7 +210,7 @@ namespace WebApplication2.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("FirstName,LastName,Telephone,E_Mail,Id,name,Password,type")] Client client)
+        public async Task<IActionResult> Edit(int id, [Bind("Telephone,E_Mail,Id,Name,Password,Type")] Client client)
         {
             if (id != client.Id)
             {

@@ -8,7 +8,6 @@ namespace WebApplication2.Models
 {
     public class CategoryImage
     {
-        [Required, Key]
         public int Id { get; set; }
 
         public int CategoryId { get; set; }

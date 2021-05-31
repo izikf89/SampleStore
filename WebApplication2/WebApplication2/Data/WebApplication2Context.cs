@@ -22,7 +22,7 @@ namespace WebApplication2.Data
 
         public DbSet<WebApplication2.Models.Order> Order { get; set; }
 
-        public DbSet<WebApplication2.Models.Prodact> Prodact { get; set; }
+        public DbSet<WebApplication2.Models.Product> Prodact { get; set; }
 
         public DbSet<WebApplication2.Models.productImage> productImage { get; set; }
 

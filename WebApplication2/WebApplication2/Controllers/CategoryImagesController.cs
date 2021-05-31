@@ -48,7 +48,7 @@ namespace WebApplication2.Controllers
         // GET: CategoryImages/Create
         public IActionResult Create()
         {
-            ViewData["CategoryId"] = new SelectList(_context.Category, "CategoryId", "CategoryId");
+            ViewData["CategoryId"] = new SelectList(_context.Category, "CategoryId", "Name");
             return View();
         }
 
@@ -65,7 +65,7 @@ namespace WebApplication2.Controllers
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["CategoryId"] = new SelectList(_context.Category, "CategoryId", "CategoryId", categoryImage.CategoryId);
+            ViewData["CategoryId"] = new SelectList(_context.Category, "CategoryId", "Name", categoryImage.CategoryId);
             return View(categoryImage);
         }
 
@@ -82,7 +82,7 @@ namespace WebApplication2.Controllers
             {
                 return NotFound();
             }
-            ViewData["CategoryId"] = new SelectList(_context.Category, "CategoryId", "CategoryId", categoryImage.CategoryId);
+            ViewData["CategoryId"] = new SelectList(_context.Category, "CategoryId", "Name", categoryImage.CategoryId);
             return View(categoryImage);
         }
 
@@ -118,7 +118,7 @@ namespace WebApplication2.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["CategoryId"] = new SelectList(_context.Category, "CategoryId", "CategoryId", categoryImage.CategoryId);
+            ViewData["CategoryId"] = new SelectList(_context.Category, "CategoryId", "Name", categoryImage.CategoryId);
             return View(categoryImage);
         }
 

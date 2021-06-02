@@ -2,47 +2,94 @@
 @using Microsoft.AspNetCore.Authorization
 @inject IAuthorizationService AuthorizationService
 @{
-	ViewData["Title"] = "Index";
-	Layout = "~/Views/Shared/_Layout.cshtml";
+    ViewData["Title"] = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h1>קטגוריות</h1>
+<h1 style="text-align: center;">קטגוריות</h1>
 
-<p>
-	<a asp-action="Create">צור קטגוריה חדשה</a>
+<p style="text-align: right;">
+    <a class="createCategory" asp-action="Create">צור קטגוריה חדשה</a>
 </p>
-<table class="table">
-	<thead>
-		<tr>
-			<th>
-				@Html.DisplayNameFor(model => model.Name)
-			</th>
-			<th>
-				@Html.DisplayNameFor(model => model.imgPath)
-			</th>
-			<th></th>
-		</tr>
-	</thead>
-	<tbody>
-		@foreach (var item in Model)
-		{
-			<tr>
-				<td>
-					@Html.DisplayFor(modelItem => item.Name)
-				</td>
-				<td>
-					<img height="40" width="40" src="@item.imgPath" />
-				</td>
-				<td>
-					@if (User.Identity.IsAuthenticated && User.IsInRole(nameof(TypeUser.admin)))						
-						{
-							<a asp-action="Edit" asp-route-id="@item.CategoryId">עריכה</a>
-							<span>|</span>
-							<a asp-action="Delete" asp-route-id="@item.CategoryId">מחיקה</a>
-						}
-					@*<a asp-action="Details" asp-route-id="@item.CategoryId">Details</a> |*@
-					</td>
-			</tr>
-		}
-	</tbody>
-</table>
+<div class="categories">
+    @foreach (var item in Model)
+    {
+    <div class="category-container">
+        <div class="category">
+            <div class="category-name">
+                @Html.DisplayFor(modelItem => item.Name)
+            </div>
+            <div>
+                <img class="category-image" src="@item.imgPath" />
+            </div>
+            <div>
+                @if (User.Identity.IsAuthenticated && User.IsInRole(nameof(TypeUser.admin)))
+                {
+                    <a asp-action="Edit" asp-route-id="@item.CategoryId">עריכה</a>
+                    <span>|</span>
+                    <a asp-action="Delete" asp-route-id="@item.CategoryId">מחיקה</a>
+                }
+            </div>
+        </div>
+    </div>
+    }
+</div>
+
+<style>
+    .categories {
+        display: flex;
+        flex-wrap: wrap;
+    }
+
+    .category-container {
+        width: calc(33% - 50px);
+        margin-left: 50px;
+        margin-bottom: 50px;
+    }
+
+    .category {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: space-between;
+        background-color: #eaeded;
+        width: 250px;
+        height: 250px;
+        padding: 20px;
+        box-sizing: content-box;
+        border-radius: 15px;
+        cursor: pointer;
+    }
+
+    .category:hover {
+        box-shadow: 0px 0px 23px 5px rgba(0,0,0,0.43);
+    }
+
+    .category-name {
+        font-size: 23px;
+        margin-left: 15px;
+    }
+
+    .category-image {
+        max-height: 200px;
+        width: 250px;
+    }
+
+    .createCategory {
+        color: white;
+        padding: 7px 10px;
+        background: #0078fa;
+        border-radius: 15px;
+        text-decoration: none;
+    }
+
+    .createCategory:hover {
+        color: white;
+        background: #0056b3;
+        text-decoration: none;
+    }
+
+    tr {
+        text-align: right;
+    }
+</style>

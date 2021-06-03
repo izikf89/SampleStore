@@ -18,7 +18,7 @@ namespace WebApplication2.Controllers
             _logger = logger;
         }
 
-        public IActionResult Index()
+        public IActionResult Index(int id = 0)
         {
             return View();
         }

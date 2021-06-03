@@ -22,7 +22,6 @@ namespace WebApplication2.Controllers
             _context = context;
         }
 
-
         // GET: Orders/ShoppingCart
         public async Task<IActionResult> ShoppingCart()
         {
@@ -41,9 +40,6 @@ namespace WebApplication2.Controllers
         [HttpPost]
         public async Task<IActionResult> AddToShoppingCart(int productId)
         {
-            //if (!User.Identity.IsAuthenticated)
-            //    return Unauthorized("אתה לא מחובר!");
-
             int userId = int.Parse(((ClaimsIdentity)User.Identity).FindFirst("Id").Value);
 
             Product product = await _context.Prodact.FindAsync(productId);
@@ -52,11 +48,29 @@ namespace WebApplication2.Controllers
             if (order.Prodacts.Contains(product))
                 return BadRequest("המוצר כבר קיים בעגלה");
 
+            order.Total = order.Total + product.Price;
             order.Prodacts.Add(product);
+
             _context.Update(order);
             await _context.SaveChangesAsync();
 
             return Ok("המוצר נוסף לעגלה בהצלחה.");
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> FinishOrder(int id)
+        {
+            int userId = int.Parse(((ClaimsIdentity)User.Identity).FindFirst("Id").Value);
+
+            Product product = await _context.Prodact.FindAsync(id);
+            Order order = await GetCurrentOrder(userId);
+
+            order = _context.Order.Include(x => x.Prodacts).Single(x => x.Id == order.Id);
+            order.Status = OrderStatuses.WAITING;
+
+            await _context.SaveChangesAsync();
+
+            return RedirectToAction( nameof(Index), "Home", new { id = 1 });
         }
 
         [HttpGet]
@@ -69,12 +83,8 @@ namespace WebApplication2.Controllers
 
             order = _context.Order.Include(x => x.Prodacts).Single(x => x.Id == order.Id);
             order.Prodacts.Remove(product);
+            order.Total = order.Total - product.Price;
 
-            //AddProducts(order);
-
-            //order.Prodacts.Remove(product);
-
-            //_context.Update(order);
             await _context.SaveChangesAsync();
 
             return RedirectToAction(nameof(Details), new { id = order.Id });
@@ -98,7 +108,7 @@ namespace WebApplication2.Controllers
             return order;
         }
 
-
+        [Authorize(Roles = nameof(TypeUser.admin))]
         // GET: Orders
         public async Task<IActionResult> Index()
         {
@@ -109,19 +119,21 @@ namespace WebApplication2.Controllers
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null)
-            {
                 return NotFound();
-            }
 
             int userId = GetUserId();
 
-            var order = await _context.Order
-                .FirstOrDefaultAsync(m => m.Id == id && m.user.Id == userId);
-            AddProducts(order);
+            var order = await _context.Order.Include(o=> o.Prodacts)
+                .SingleAsync(m => m.Id == id && m.user.Id == userId);
+
+            await Task.WhenAll(order.Prodacts.Select(async product => {
+                var temp = await _context.Prodact.Include(x => x.Pictuers).SingleAsync(m => m.Id == product.Id);
+                product.Pictuers = temp.Pictuers;
+            }));
+
+            //AddProducts(order);
             if (order == null)
-            {
                 return NotFound();
-            }
 
             return View(order);
         }
@@ -148,6 +160,7 @@ namespace WebApplication2.Controllers
             return View(order);
         }
 
+        [Authorize(Roles = nameof(TypeUser.admin))]
         // GET: Orders/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
@@ -164,6 +177,7 @@ namespace WebApplication2.Controllers
             return View(order);
         }
 
+        [Authorize(Roles = nameof(TypeUser.admin))]
         // POST: Orders/Edit/5
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
@@ -199,6 +213,7 @@ namespace WebApplication2.Controllers
             return View(order);
         }
 
+        [Authorize(Roles = nameof(TypeUser.admin))]
         // GET: Orders/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
@@ -217,6 +232,7 @@ namespace WebApplication2.Controllers
             return View(order);
         }
 
+        [Authorize(Roles = nameof(TypeUser.admin))]
         // POST: Orders/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]

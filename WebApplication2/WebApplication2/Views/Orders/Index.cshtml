@@ -29,7 +29,21 @@
                 @Html.DisplayFor(modelItem => item.Total)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.Status)
+                @switch (item.Status)
+				{
+                    case OrderStatuses.OPEN:
+                        <span>פתוח</span>
+                            break;
+                    case OrderStatuses.WAITING:
+                        <span>ממתין לטיפול</span>
+                            break;
+                    case OrderStatuses.IN_PROCESS:
+                        <span>בטיפול</span>
+                            break;
+                    case OrderStatuses.CLOSE:
+                        <span>סגור</span>
+                            break;
+				}
             </td>
             <td>
                 <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |

@@ -21,7 +21,21 @@
 			@Html.DisplayNameFor(model => model.Status)
 		</dt>
 		<dd class="col-sm-10">
-			@Html.DisplayFor(model => model.Status)
+			@switch (Model.Status)
+			{
+				case OrderStatuses.OPEN:
+					<span>פתוח</span>
+					break;
+				case OrderStatuses.WAITING:
+					<span>ממתין לטיפול</span>
+					break;
+				case OrderStatuses.IN_PROCESS:
+					<span>בטיפול</span>
+					break;
+				case OrderStatuses.CLOSE:
+					<span>סגור</span>
+					break;
+			}
 		</dd>
 	</dl>
 </div>
@@ -50,7 +64,7 @@
 					@Html.DisplayFor(modelItem => item.Price)
 				</td>
 				<td>
-					<img src="/@item.Pictuers?.FirstOrDefault()" />
+					<img width="50" src="/@item.Pictuers?.FirstOrDefault().Image" />
 				</td>
 				<td>
 					<a class="btn btn-danger" asp-action="DleleteFromCart" asp-route-id="@item.Id">הסר</a>
@@ -61,6 +75,8 @@
 	</tbody>
 </table>
 
+<a class="btn btn-success" asp-action="FinishOrder" asp-route-id="@Model.Id">סיים הזמנה</a>
+
 
 <div>
 	<a asp-action="Edit" asp-route-id="@Model.Id">Edit</a> |
@@ -69,25 +85,9 @@
 
 
 
-@*@section Scripts
-{
-	<script>
-		function dleleteFromCart(productId) {
-			$.ajax({
-				url: "/Orders/DleleteFromCart?productId=" + productId,
-				type: "POST",
-				cache: false,
-				async: true,
-				success: function (data) {
-					console.log(data)
-					alert("המוצר הוסר בהצלחה");
-				},
-				error: function (data) {
-					console.log(data)
-					const msg = (data.status === 401) ? "אתה לא מחובר" : "אירעה שגיאה";
-					alert(msg);
-				},
-			});
-		}
-	</script>
-}*@ 
+@section Scripts
+	{
+		<script>
+			
+		</script>
+	} 

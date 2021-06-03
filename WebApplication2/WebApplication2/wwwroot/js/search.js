@@ -32,18 +32,18 @@
 
     $('#ordersSearch').keyup(function () {
         var t = $(this);
-        search(t.val(), "/Orders/search?query=", 'tbody', '#orders-template', 'status', function (status) {
+        search(t.val(), "/Orders/search?query=", 'tbody', '#orders-template', 'Status', function (status) {
             switch (status) {
-                case OrderStatuses.OPEN:
+                case 0:
                     return "פתוח";
                     break;
-                case OrderStatuses.WAITING:
+                case 1:
                     return "ממתין לטיפול";
                     break;
-                case OrderStatuses.IN_PROCESS:
+                case 2:
                     return "בטיפול";
                     break;
-                case OrderStatuses.CLOSE:
+                case 3:
                     return "סגור";
                     break;
             }

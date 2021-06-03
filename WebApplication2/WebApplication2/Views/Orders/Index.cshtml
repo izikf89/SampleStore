@@ -1,64 +1,92 @@
 ﻿@model IEnumerable<WebApplication2.Models.Order>
 
 @{
-	ViewData["Title"] = "Index";
-	Layout = "~/Views/Shared/_Layout.cshtml";
+    ViewData["Title"] = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
 <h1 style="text-align: center;">הזמנות</h1>
 
+<input id="ordersSearch" class="form-control mr-sm-2" type="search" placeholder="חיפוש" aria-label="Search" style="width: 250px; margin-bottom: 15px; display: inline-block;">
+
 <table class="table">
-	<thead>
-		<tr>
-			<th>
-				@Html.DisplayNameFor(model => model.Id)
-			</th>
-			<th>שם משתמש</th>
-			<th>
-				@Html.DisplayNameFor(model => model.Total)
-			</th>
-			<th>
-				@Html.DisplayNameFor(model => model.Status)
-			</th>
-			<th></th>
-		</tr>
-	</thead>
-	<tbody>
-		@foreach (var item in ViewBag.OrdersList)
-		{
-			<tr>
-				<td>
-					@item.Id
-				</td>
-				<td>
-					@item.ClientName
-				</td>
-				<td>
-					@item.Total
-				</td>
-				<td>
-					@switch (item.Status)
-					{
-						case OrderStatuses.OPEN:
-							<span>פתוח</span>
-							break;
-						case OrderStatuses.WAITING:
-							<span>ממתין לטיפול</span>
-							break;
-						case OrderStatuses.IN_PROCESS:
-							<span>בטיפול</span>
-							break;
-						case OrderStatuses.CLOSE:
-							<span>סגור</span>
-							break;
-					}
-				</td>
-				<td>
-					<a class="btn btn-primary btn-sm" asp-action="Edit" asp-route-id="@item.Id">עריכה</a>
-					<a class="btn btn-secondary btn-sm" asp-action="Details" asp-route-id="@item.Id">פרטים</a>
-					<a class="btn btn-danger btn-sm" asp-action="Delete" asp-route-id="@item.Id">מחיקה</a>
-				</td>
-			</tr>
-		}
-	</tbody>
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Id)
+            </th>
+            <th>שם משתמש</th>
+            <th>
+                @Html.DisplayNameFor(model => model.Total)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Status)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in ViewBag.OrdersList)
+        {
+            <tr>
+                <td>
+                    @item.Id
+                </td>
+                <td>
+                    @item.ClientName
+                </td>
+                <td>
+                    @item.Total
+                </td>
+                <td>
+                    @switch (item.Status)
+                    {
+                        case OrderStatuses.OPEN:
+                            <span>פתוח</span>
+                            break;
+                        case OrderStatuses.WAITING:
+                            <span>ממתין לטיפול</span>
+                            break;
+                        case OrderStatuses.IN_PROCESS:
+                            <span>בטיפול</span>
+                            break;
+                        case OrderStatuses.CLOSE:
+                            <span>סגור</span>
+                            break;
+                    }
+                </td>
+                <td>
+                    <a class="btn btn-primary btn-sm" asp-action="Edit" asp-route-id="@item.Id">עריכה</a>
+                    <a class="btn btn-secondary btn-sm" asp-action="Details" asp-route-id="@item.Id">פרטים</a>
+                    <a class="btn btn-danger btn-sm" asp-action="Delete" asp-route-id="@item.Id">מחיקה</a>
+                </td>
+            </tr>
+        }
+    </tbody>
 </table>
+
+<script id="orders-template">
+ <tr>
+                <td>
+                    {Id}
+                </td>
+     <td>
+         {ClientName}
+                </td>
+                <td>
+         {Total}
+                </td>
+                <td>
+                    <span>{Status}</span>
+                </td>
+                <td>
+                    <a class="btn btn-primary btn-sm" href="Orders/Edit/{Id}">עריכה</a>
+                     <a class="btn btn-secondary btn-sm" href="Orders/Details/{Id}">פרטים</a>
+                     <a class="btn btn-danger btn-sm" href="Orders/Delete/{Id}">מחיקה</a>
+                </td>
+            </tr>
+</script>
+
+@section Scripts {
+    <script src="~/js/search.js" asp-append-version="true"></script>
+}

@@ -126,6 +126,27 @@ namespace WebApplication2.Controllers
             return View(await _context.Order.ToListAsync());
         }
 
+        [Authorize(Roles = nameof(TypeUser.admin))]
+        // GET: Search Orders
+        public async Task<IActionResult> Search(string query)
+        {
+            if (String.IsNullOrEmpty(query))
+            {
+                var innerJoinQuery =
+                 from order in _context.Order
+                 join client in _context.Client on order.user.Id equals client.Id
+                 select new { Id = order.Id, Status = order.Status, Total = order.Total, ClientName = client.Name }.ToExpando();
+                return Json(await innerJoinQuery.ToListAsync());
+            }
+
+            var filteredOrders = from order in _context.Order
+                                  where order.user.Name.Contains(query) || order.Id.ToString().Contains(query) || order.Total.ToString().Contains(query)
+                                 join client in _context.Client on order.user.Id equals client.Id
+                                 select new { Id = order.Id, Status = order.Status, Total = order.Total, ClientName = client.Name }.ToExpando(); 
+
+            return Json(await filteredOrders.ToListAsync());
+        }
+
         // GET: Orders/Details/5
         public async Task<IActionResult> Details(int? id)
         {

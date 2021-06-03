@@ -27,6 +27,7 @@ namespace WebApplication2.Models
         //public int CategoryId { get; set; }
         [DisplayName("קטגוריות")]
         public List<Category> Categories { get; set; } //M2M
+        public List<Order> Orders { get; set; } //M2M
         
     }
 }

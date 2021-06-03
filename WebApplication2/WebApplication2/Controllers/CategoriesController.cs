@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Security.Claims;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
@@ -32,7 +33,7 @@ namespace WebApplication2.Controllers
             ViewBag.Products = new SelectList(departmentsQuery, "Id", "Name");
 
             ViewBag.MyProducts = new SelectList(category.Prodacts, "Id", "Name");
-        }
+        }       
 
         [HttpPost]
         [ValidateAntiForgeryToken]

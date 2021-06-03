@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using WebApplication2.Data;
 
 namespace WebApplication2.Migrations
 {
     [DbContext(typeof(WebApplication2Context))]
-    partial class WebApplication2ContextModelSnapshot : ModelSnapshot
+    [Migration("20210603083031_update-4")]
+    partial class update4
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -32,21 +34,6 @@ namespace WebApplication2.Migrations
                     b.HasIndex("ProdactsId");
 
                     b.ToTable("CategoryProduct");
-                });
-
-            modelBuilder.Entity("OrderProduct", b =>
-                {
-                    b.Property<int>("OrdersId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("ProdactsId")
-                        .HasColumnType("int");
-
-                    b.HasKey("OrdersId", "ProdactsId");
-
-                    b.HasIndex("ProdactsId");
-
-                    b.ToTable("OrderProduct");
                 });
 
             modelBuilder.Entity("WebApplication2.Models.Category", b =>
@@ -98,9 +85,6 @@ namespace WebApplication2.Migrations
                     b.Property<int?>("ClientId")
                         .HasColumnType("int");
 
-                    b.Property<int>("Status")
-                        .HasColumnType("int");
-
                     b.Property<int>("Total")
                         .HasColumnType("int");
 
@@ -127,10 +111,15 @@ namespace WebApplication2.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<int?>("OrderId")
+                        .HasColumnType("int");
+
                     b.Property<int>("Price")
                         .HasColumnType("int");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("OrderId");
 
                     b.ToTable("Prodact");
                 });
@@ -216,21 +205,6 @@ namespace WebApplication2.Migrations
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("OrderProduct", b =>
-                {
-                    b.HasOne("WebApplication2.Models.Order", null)
-                        .WithMany()
-                        .HasForeignKey("OrdersId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("WebApplication2.Models.Product", null)
-                        .WithMany()
-                        .HasForeignKey("ProdactsId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                });
-
             modelBuilder.Entity("WebApplication2.Models.CategoryImage", b =>
                 {
                     b.HasOne("WebApplication2.Models.Category", "Category")
@@ -255,11 +229,23 @@ namespace WebApplication2.Migrations
                     b.Navigation("user");
                 });
 
+            modelBuilder.Entity("WebApplication2.Models.Product", b =>
+                {
+                    b.HasOne("WebApplication2.Models.Order", null)
+                        .WithMany("Prodacts")
+                        .HasForeignKey("OrderId");
+                });
+
             modelBuilder.Entity("WebApplication2.Models.productImage", b =>
                 {
                     b.HasOne("WebApplication2.Models.Product", null)
                         .WithMany("Pictuers")
                         .HasForeignKey("ProductId1");
+                });
+
+            modelBuilder.Entity("WebApplication2.Models.Order", b =>
+                {
+                    b.Navigation("Prodacts");
                 });
 
             modelBuilder.Entity("WebApplication2.Models.Product", b =>

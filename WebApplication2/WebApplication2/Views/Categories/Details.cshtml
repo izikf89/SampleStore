@@ -36,6 +36,7 @@
 				מחיר
 			</th>
 			<th></th>
+			<th></th>
 		</tr>
 	</thead>
 	<tbody>
@@ -51,7 +52,9 @@
 				<td>
 					<img src="/@item.Pictuers?.FirstOrDefault()" />
 				</td>
-
+				<td>
+					<button class="btn btn-info" onClick='addToCart(@item.Id)'>הוסף לעגלה</button>
+				</td>
 			</tr>
 		}
 
@@ -61,3 +64,28 @@
 	<a asp-action="Edit" asp-route-id="@Model.CategoryId">Edit</a> |
 	<a asp-action="Index">Back to List</a>
 </div>
+
+
+
+@section Scripts
+{
+	<script>
+		function addToCart(productId) {
+			$.ajax({
+				url: "/Orders/AddToShoppingCart?productId=" + productId,
+				type: "POST",
+				cache: false,
+				async: true,
+				success: function (data) {
+					console.log(data)
+					alert("המוצר נוסף בהצלחה");
+				},
+				error: function (data) {
+					console.log(data)
+					const msg = (data.status === 401) ? "אתה לא מחובר" : "אירעה שגיאה";
+					alert(msg);
+				},
+			});
+		}
+	</script>
+} 

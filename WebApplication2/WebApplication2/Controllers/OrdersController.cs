@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Claims;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -21,6 +22,83 @@ namespace WebApplication2.Controllers
             _context = context;
         }
 
+
+        // GET: Orders/ShoppingCart
+        public async Task<IActionResult> ShoppingCart()
+        {
+            int userId = GetUserId();
+
+            Order order = await GetCurrentOrder(userId);
+
+            return RedirectToAction(nameof(Details), new { id = order.Id });
+        }
+
+        private int GetUserId()
+        {
+            return int.Parse(((ClaimsIdentity)User.Identity).FindFirst("Id").Value);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> AddToShoppingCart(int productId)
+        {
+            //if (!User.Identity.IsAuthenticated)
+            //    return Unauthorized("אתה לא מחובר!");
+
+            int userId = int.Parse(((ClaimsIdentity)User.Identity).FindFirst("Id").Value);
+
+            Product product = await _context.Prodact.FindAsync(productId);
+
+            Order order = await GetCurrentOrder(userId);
+            if (order.Prodacts.Contains(product))
+                return BadRequest("המוצר כבר קיים בעגלה");
+
+            order.Prodacts.Add(product);
+            _context.Update(order);
+            await _context.SaveChangesAsync();
+
+            return Ok("המוצר נוסף לעגלה בהצלחה.");
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> DleleteFromCart(int id)
+        {
+            int userId = int.Parse(((ClaimsIdentity)User.Identity).FindFirst("Id").Value);
+
+            Product product = await _context.Prodact.FindAsync(id);
+            Order order = await GetCurrentOrder(userId);
+
+            order = _context.Order.Include(x => x.Prodacts).Single(x => x.Id == order.Id);
+            order.Prodacts.Remove(product);
+
+            //AddProducts(order);
+
+            //order.Prodacts.Remove(product);
+
+            //_context.Update(order);
+            await _context.SaveChangesAsync();
+
+            return RedirectToAction(nameof(Details), new { id = order.Id });
+        }
+
+        public async Task<Order> GetCurrentOrder(int userId)
+        {
+            var order = await _context.Order
+                .FirstOrDefaultAsync(m => m.user.Id == userId && m.Status == OrderStatuses.OPEN);
+
+            if (order == null)
+            {
+                order = new Order();
+                order.user = await _context.User
+                    .FirstOrDefaultAsync(u => u.Id == userId);
+
+                _context.Add(order);
+                await _context.SaveChangesAsync();
+            }
+
+            return order;
+        }
+
+
         // GET: Orders
         public async Task<IActionResult> Index()
         {
@@ -35,8 +113,11 @@ namespace WebApplication2.Controllers
                 return NotFound();
             }
 
+            int userId = GetUserId();
+
             var order = await _context.Order
-                .FirstOrDefaultAsync(m => m.Id == id);
+                .FirstOrDefaultAsync(m => m.Id == id && m.user.Id == userId);
+            AddProducts(order);
             if (order == null)
             {
                 return NotFound();
@@ -56,7 +137,7 @@ namespace WebApplication2.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Total")] Order order)
+        public async Task<IActionResult> Create([Bind("Id,Total,Status")] Order order)
         {
             if (ModelState.IsValid)
             {
@@ -88,7 +169,7 @@ namespace WebApplication2.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,Total")] Order order)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,Total,Status")] Order order)
         {
             if (id != order.Id)
             {
@@ -150,6 +231,14 @@ namespace WebApplication2.Controllers
         private bool OrderExists(int id)
         {
             return _context.Order.Any(e => e.Id == id);
+        }
+
+        private void AddProducts(Order order)
+        {
+            var Query = from d in _context.Order
+                        where d.Id == order.Id
+                        select d.Prodacts;
+            order.Prodacts = Query.FirstOrDefault();
         }
     }
 }

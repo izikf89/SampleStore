@@ -8,7 +8,7 @@
 <h1 style="text-align: center;">מוצרים</h1>
 
 <p>
-    <a asp-action="Create">Create New</a>
+    <a asp-action="Create">יצירת מוצר</a>
 </p>
 <p>
 	<a asp-controller="productImages" asp-action="Create">הוסף תמונה</a>
@@ -35,10 +35,10 @@
                 @Html.DisplayFor(modelItem => item.Price)
             </td>
             <td>
-                <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.Id">Delete</a> |
-                <a asp-controller="productImages" asp-action="Index" asp-route-id="@item.Id">ערוך תמונות</a>
+                <a class="btn btn-primary btn-sm" asp-action="Edit" asp-route-id="@item.Id">עריכה</a>
+                <a class="btn btn-primary btn-sm" asp-controller="productImages" asp-action="Index" asp-route-id="@item.Id">ערוך תמונות</a>
+                @*<a class="btn btn-secondary btn-sm" asp-action="Details" asp-route-id="@item.Id">פרטים</a>*@
+                <a class="btn btn-danger btn-sm" asp-action="Delete" asp-route-id="@item.Id">מחיקה</a>
             </td>
         </tr>
 }

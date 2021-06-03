@@ -5,30 +5,37 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h1>Delete</h1>
+<h1>מחיקה</h1>
 
-<h3>Are you sure you want to delete this?</h3>
+<h3>האם אתה בטוח שברצונך למחוק את המוצר הזה?</h3>
 <div>
-    <h4>Product</h4>
     <hr />
-    <dl class="row">
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Name)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Name)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Price)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Price)
-        </dd>
-    </dl>
-    
-    <form asp-action="Delete">
-        <input type="hidden" asp-for="Id" />
-        <input type="submit" value="Delete" class="btn btn-danger" /> |
-        <a asp-action="Index">Back to List</a>
-    </form>
+    <div class="item">
+        <div class="item-detailes">
+            <div>
+                <span class="description">@Html.DisplayNameFor(model => model.Name)</span>:
+                <span>@Html.DisplayFor(model => model.Name)</span>
+            </div>       
+            <div>
+                <span class="description">@Html.DisplayNameFor(model => model.Price)</span>:
+                <span>@Html.DisplayFor(model => model.Price)</span>
+            </div>
+        </div>
+        <form asp-action="Delete">
+            <input type="hidden" asp-for="Id" />
+            <input type="submit" value="מחק" class="btn btn-danger delete" />
+            <a asp-action="Index" class="btn btn-secondary">ביטול</a>
+        </form>
+    </div>
 </div>
+
+<style>
+    .delete {
+        margin-left: 10px;
+    }
+
+    .item {
+        font-size: 20px;
+        font-weight: 500;
+    }
+</style>

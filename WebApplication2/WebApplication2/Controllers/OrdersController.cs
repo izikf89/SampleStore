@@ -119,7 +119,7 @@ namespace WebApplication2.Controllers
             var innerJoinQuery =
                  from order in _context.Order
                 join client in _context.Client on order.user.Id equals client.Id 
-                select new { Id = order.Id, Status = order.Status, Total = order.Total, ClientName = client.Name }.ToExpando();
+                select new { Id = order.Id, Status = order.Status, Total = order.Total, ClientName = client.Name, Phone = client.Telephone }.ToExpando();
 
             ViewBag.OrdersList = innerJoinQuery.ToList();
 
@@ -135,14 +135,14 @@ namespace WebApplication2.Controllers
                 var innerJoinQuery =
                  from order in _context.Order
                  join client in _context.Client on order.user.Id equals client.Id
-                 select new { Id = order.Id, Status = order.Status, Total = order.Total, ClientName = client.Name }.ToExpando();
+                 select new { Id = order.Id, Status = order.Status, Total = order.Total, ClientName = client.Name, Phone = client.Telephone }.ToExpando();
                 return Json(await innerJoinQuery.ToListAsync());
             }
 
             var filteredOrders = from order in _context.Order
                                   where order.user.Name.Contains(query) || order.Id.ToString().Contains(query) || order.Total.ToString().Contains(query)
                                  join client in _context.Client on order.user.Id equals client.Id
-                                 select new { Id = order.Id, Status = order.Status, Total = order.Total, ClientName = client.Name }.ToExpando(); 
+                                 select new { Id = order.Id, Status = order.Status, Total = order.Total, ClientName = client.Name, Phone = client.Telephone }.ToExpando(); 
 
             return Json(await filteredOrders.ToListAsync());
         }

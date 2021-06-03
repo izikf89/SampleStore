@@ -8,10 +8,8 @@
 <h1 style="text-align: center;">מוצרים</h1>
 
 <p>
-    <a asp-action="Create">יצירת מוצר</a>
-</p>
-<p>
-	<a asp-controller="productImages" asp-action="Create">הוסף תמונה</a>
+    <a class="btn btn-primary" asp-action="Create">יצירת מוצר</a>
+    <a class="btn btn-primary" asp-controller="productImages" asp-action="Create">הוסף תמונה</a>
 </p>
 <table class="table">
     <thead>
@@ -36,7 +34,7 @@
             </td>
             <td>
                 <a class="btn btn-primary btn-sm" asp-action="Edit" asp-route-id="@item.Id">עריכה</a>
-                <a class="btn btn-primary btn-sm" asp-controller="productImages" asp-action="Index" asp-route-id="@item.Id">ערוך תמונות</a>
+                @*<a class="btn btn-primary btn-sm" asp-controller="productImages" asp-action="Index" asp-route-id="@item.Id">ערוך תמונות</a>*@
                 @*<a class="btn btn-secondary btn-sm" asp-action="Details" asp-route-id="@item.Id">פרטים</a>*@
                 <a class="btn btn-danger btn-sm" asp-action="Delete" asp-route-id="@item.Id">מחיקה</a>
             </td>

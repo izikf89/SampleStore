@@ -101,12 +101,12 @@
                 async: true,
                 success: function (data) {
                     console.log(data)
-                    alert("המוצר נוסף בהצלחה");
+					$.notify('המוצר נוסף בהצלחה', "success");
                 },
                 error: function (data) {
                     console.log(data)
                     const msg = (data.status === 401) ? "אתה לא מחובר" : "אירעה שגיאה";
-                    alert(msg);
+					$.notify(msg, "error");
                 },
             });
         }

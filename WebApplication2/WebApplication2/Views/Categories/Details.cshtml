@@ -11,31 +11,33 @@
     <hr />
 </div>
 
-@foreach (var item in Model.Prodacts)
-{
-    <div class="item-container">
-        <div class="item">
-            <img class="item-image" src="/@item.Pictuers?.FirstOrDefault().Image" />
-            <div class="item-details">
-                <div class="item-name">
-                    <span>@Html.DisplayFor(modelItem => item.Name)</span>
-                </div>
-                <div>
-                    <span>מחיר:</span>
-                    <span>
-                        @Html.DisplayFor(modelItem => item.Price)
-                    </span>
-                    <span>ש"ח</span>
-                </div>
-            </div>
-            @if (User.IsInRole(nameof(TypeUser.client)))
-            {
-                <button class="btn btn-info add-to-cart " onClick='addToCart(@item.Id)'>הוסף לעגלה</button>
-            }
-        </div>
-    </div>
-}
+<div class="items">
 
+    @foreach (var item in Model.Prodacts)
+    {
+        <div class="item-container">
+            <div class="item">
+                <img class="item-image" src="/@item.Pictuers?.FirstOrDefault().Image" />
+                <div class="item-details">
+                    <div class="item-name">
+                        <span>@Html.DisplayFor(modelItem => item.Name)</span>
+                    </div>
+                    <div>
+                        <span>מחיר:</span>
+                        <span>
+                            @Html.DisplayFor(modelItem => item.Price)
+                        </span>
+                        <span>ש"ח</span>
+                    </div>
+                </div>
+                @if (User.IsInRole(nameof(TypeUser.client)))
+                {
+                    <button class="btn btn-info add-to-cart " onClick='addToCart(@item.Id)'>הוסף לעגלה</button>
+                }
+            </div>
+        </div>
+    }
+</div>
 <div>
     <a asp-action="Index">חזור לקטגוריות</a>
 </div>
@@ -44,10 +46,13 @@
     * {
         text-align: right;
     }
+    .items {
+        display: flex;
+        flex-wrap: wrap;
+    }
     .item-container {
         width: calc(33% - 50px);
-        margin-left: 50px;
-        margin: 50px 0;
+        margin: 50px 0 50px 50px;
         position: relative;
     }
     .item {
@@ -56,7 +61,7 @@
         align-items: center;
         justify-content: space-around;
         background-color: #eaeded;
-        width: 300px;
+        width: 250px;
         height: 300px;
         padding: 20px;
         box-sizing: content-box;

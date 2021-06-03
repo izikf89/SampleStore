@@ -34,13 +34,14 @@
                 @Html.DisplayFor(modelItem => item.Password)
             </td>
             <td>
-                @if (item.Type == TypeUser.admin)
+                @switch (item.Type)
                 {
-                    <span>מנהל</span>
-                }
-                else
-                {
-                    <span>לקוח</span>
+                    case TypeUser.admin:
+                        <span>מנהל</span>
+                        break;
+                    case TypeUser.client:
+                        <span>לקוח</span>
+                        break;
                 }
             </td>
             <td>

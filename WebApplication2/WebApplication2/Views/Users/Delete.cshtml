@@ -21,16 +21,15 @@
             </div>
             <div>
                 <span class="description">@Html.DisplayNameFor(model => model.Type)</span>:
-                <span>
-                    @if (@Model.Type == TypeUser.admin)
-                    {
+                @switch (@Model.Type)
+                {
+                    case TypeUser.admin:
                         <span>מנהל</span>
-                    }
-                    else
-                    {
+                        break;
+                    case TypeUser.client:
                         <span>לקוח</span>
-                    }
-                </span>
+                        break;
+                }
             </div>
         </div>
         <form asp-action="Delete">

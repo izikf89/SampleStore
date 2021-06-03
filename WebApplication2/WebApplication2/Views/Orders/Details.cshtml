@@ -5,39 +5,35 @@
 	Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h1>Details</h1>
+<h1>פרטים</h1>
 
 <div>
-	<h4>Order</h4>
-	<hr />
-	<dl class="row">
-		<dt class="col-sm-2">
-			@Html.DisplayNameFor(model => model.Total)
-		</dt>
-		<dd class="col-sm-10">
-			@Html.DisplayFor(model => model.Total)
-		</dd>
-		<dt class="col-sm-2">
-			@Html.DisplayNameFor(model => model.Status)
-		</dt>
-		<dd class="col-sm-10">
-			@switch (Model.Status)
-			{
-				case OrderStatuses.OPEN:
-					<span>פתוח</span>
-					break;
-				case OrderStatuses.WAITING:
-					<span>ממתין לטיפול</span>
-					break;
-				case OrderStatuses.IN_PROCESS:
-					<span>בטיפול</span>
-					break;
-				case OrderStatuses.CLOSE:
-					<span>סגור</span>
-					break;
-			}
-		</dd>
-	</dl>
+    <h4>הזמנה</h4>
+    <hr />
+    <div class="order-detailes">
+        <div>
+            <span class="description">@Html.DisplayNameFor(model => model.Total)</span>:
+            <span>@Html.DisplayFor(model => model.Total)</span>
+        </div>
+        <div>
+            <span class="description">@Html.DisplayNameFor(model => model.Status)</span>:
+            @switch (Model.Status)
+            {
+                case OrderStatuses.OPEN:
+                    <span>פתוח</span>
+                    break;
+                case OrderStatuses.WAITING:
+                    <span>ממתין לטיפול</span>
+                    break;
+                case OrderStatuses.IN_PROCESS:
+                    <span>בטיפול</span>
+                    break;
+                case OrderStatuses.CLOSE:
+                    <span>סגור</span>
+                    break;
+            }
+        </div>
+    </div>
 </div>
 
 <table class="table">
@@ -75,14 +71,18 @@
 	</tbody>
 </table>
 
-<a class="btn btn-success" asp-action="FinishOrder" asp-route-id="@Model.Id">סיים הזמנה</a>
-
-
 <div>
-	<a asp-action="Edit" asp-route-id="@Model.Id">Edit</a> |
-	<a asp-action="Index">Back to List</a>
+    <a class="btn btn-success" asp-action="FinishOrder" asp-route-id="@Model.Id">סיים הזמנה</a>
+    <a class="btn btn-primary" asp-action="Edit" asp-route-id="@Model.Id">עריכה</a>
+    <a class="btn btn-secondary" asp-action="Index">חזור</a>
 </div>
 
+<style>
+    .order-detailes {
+        font-size: 20px;
+        font-weight: 500;
+    }
+</style>
 
 
 @section Scripts

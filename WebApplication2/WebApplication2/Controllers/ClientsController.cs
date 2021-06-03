@@ -44,9 +44,9 @@ namespace WebApplication2.Controllers
 
             if (q.Count() > 0)
             {
-                User a = q.First();
+                User userFound = q.First();
                 user.Type = q.First().Type;
-                Signin(user);
+                Signin(userFound);
                 //HttpContext.Session.SetString("user", q.First().Name);
                 return RedirectToAction(nameof(Index), "Home");
             }
@@ -70,6 +70,7 @@ namespace WebApplication2.Controllers
                 {
                     new Claim(ClaimTypes.Name, user.Name),
                     new Claim(ClaimTypes.Role, user.Type.ToString()),
+                    new Claim("Id", user.Id.ToString()),
                 };
 
             var claimsIdentity = new ClaimsIdentity(

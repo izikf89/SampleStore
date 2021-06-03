@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using WebApplication2.Data;
 
 namespace WebApplication2.Migrations
 {
     [DbContext(typeof(WebApplication2Context))]
-    partial class WebApplication2ContextModelSnapshot : ModelSnapshot
+    [Migration("20210603085217_update-5")]
+    partial class update5
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -32,21 +34,6 @@ namespace WebApplication2.Migrations
                     b.HasIndex("ProdactsId");
 
                     b.ToTable("CategoryProduct");
-                });
-
-            modelBuilder.Entity("OrderProduct", b =>
-                {
-                    b.Property<int>("OrdersId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("ProdactsId")
-                        .HasColumnType("int");
-
-                    b.HasKey("OrdersId", "ProdactsId");
-
-                    b.HasIndex("ProdactsId");
-
-                    b.ToTable("OrderProduct");
                 });
 
             modelBuilder.Entity("WebApplication2.Models.Category", b =>
@@ -127,10 +114,15 @@ namespace WebApplication2.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<int?>("OrderId")
+                        .HasColumnType("int");
+
                     b.Property<int>("Price")
                         .HasColumnType("int");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("OrderId");
 
                     b.ToTable("Prodact");
                 });
@@ -174,12 +166,15 @@ namespace WebApplication2.Migrations
                     b.Property<string>("Image")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int?>("ProductId")
+                    b.Property<string>("ProductId")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int?>("ProductId1")
                         .HasColumnType("int");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("ProductId");
+                    b.HasIndex("ProductId1");
 
                     b.ToTable("productImage");
                 });
@@ -203,21 +198,6 @@ namespace WebApplication2.Migrations
                     b.HasOne("WebApplication2.Models.Category", null)
                         .WithMany()
                         .HasForeignKey("CategoriesCategoryId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("WebApplication2.Models.Product", null)
-                        .WithMany()
-                        .HasForeignKey("ProdactsId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                });
-
-            modelBuilder.Entity("OrderProduct", b =>
-                {
-                    b.HasOne("WebApplication2.Models.Order", null)
-                        .WithMany()
-                        .HasForeignKey("OrdersId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -252,11 +232,23 @@ namespace WebApplication2.Migrations
                     b.Navigation("user");
                 });
 
+            modelBuilder.Entity("WebApplication2.Models.Product", b =>
+                {
+                    b.HasOne("WebApplication2.Models.Order", null)
+                        .WithMany("Prodacts")
+                        .HasForeignKey("OrderId");
+                });
+
             modelBuilder.Entity("WebApplication2.Models.productImage", b =>
                 {
                     b.HasOne("WebApplication2.Models.Product", null)
                         .WithMany("Pictuers")
-                        .HasForeignKey("ProductId");
+                        .HasForeignKey("ProductId1");
+                });
+
+            modelBuilder.Entity("WebApplication2.Models.Order", b =>
+                {
+                    b.Navigation("Prodacts");
                 });
 
             modelBuilder.Entity("WebApplication2.Models.Product", b =>

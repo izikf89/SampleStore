@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Security.Claims;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
@@ -32,11 +33,11 @@ namespace WebApplication2.Controllers
             ViewBag.Products = new SelectList(departmentsQuery, "Id", "Name");
 
             ViewBag.MyProducts = new SelectList(category.Prodacts, "Id", "Name");
-        }
+        }       
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Ctreate(Category category)
+        public async Task<IActionResult> Create(Category category)
         {
             if (ModelState.IsValid)
             {
@@ -85,19 +86,19 @@ namespace WebApplication2.Controllers
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null)
-            {
                 return NotFound();
-            }
 
-            var category = await _context.Category
-                .FirstOrDefaultAsync(m => m.CategoryId == id);
+            var category = await _context.Category.Include(x => x.Prodacts).SingleAsync(x => x.CategoryId == id.Value);
 
             if (category == null)
-            {
                 return NotFound();
-            }
+            
+            var task = category.Prodacts.Select(async product => {
+                var temp = await _context.Prodact.Include(x => x.Pictuers).SingleAsync(m => m.Id == product.Id);
+                product.Pictuers = temp.Pictuers; 
+            });
 
-            AddProducts(category);
+            await Task.WhenAll(task);
 
             return View(category);
         }
@@ -106,22 +107,6 @@ namespace WebApplication2.Controllers
         public IActionResult Create()
         {
             return View();
-        }
-
-        // POST: Categories/Create
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("CategoryId,Name,imgPath")] Category category)
-        {
-            if (ModelState.IsValid)
-            {
-                _context.Add(category);
-                await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
-            }
-            return View(category);
         }
 
         // GET: Categories/Edit/5
@@ -185,18 +170,20 @@ namespace WebApplication2.Controllers
         public async Task<IActionResult> Edit(int id, Category category)
         {
             if (id != category.CategoryId)
-            {
                 return NotFound();
-            }
 
             if (ModelState.IsValid)
             {
                 try
                 {
-                    string OldImgPath = (await _context.Category.AsNoTracking().FirstOrDefaultAsync(x => x.CategoryId == id)).imgPath;
+                    if(category.img != null)
+                    {
+                        string OldImgPath = (await _context.Category.AsNoTracking().FirstOrDefaultAsync(x => x.CategoryId == id)).imgPath;
 
-                    RemoveImg(OldImgPath);
-                    category.imgPath = UploadedFile(category);
+                        RemoveImg(OldImgPath);
+                        category.imgPath = UploadedFile(category);
+                    }
+
                     AddProducts(category);
 
                     _context.Update(category);

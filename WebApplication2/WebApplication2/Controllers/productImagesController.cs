@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
@@ -20,9 +21,23 @@ namespace WebApplication2.Controllers
         }
 
         // GET: productImages
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(int? id)
         {
-            return View(await _context.productImage.ToListAsync());
+            if (id == null)
+            {
+                return View(await _context.productImage.ToListAsync());
+
+            }
+
+            var productImages = await _context.productImage
+               .Where(m => m.ProductId == id.ToString()).ToListAsync();
+
+            if (productImages == null)
+            {
+                return NotFound();
+            }
+
+            return View(productImages);
         }
 
         // GET: productImages/Details/5
@@ -46,6 +61,7 @@ namespace WebApplication2.Controllers
         // GET: productImages/Create
         public IActionResult Create()
         {
+            PopulateProductstsDropDownList();
             return View();
         }
 
@@ -54,16 +70,46 @@ namespace WebApplication2.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Image")] productImage productImage)
+        public async Task<IActionResult> Create(productImage productImage)
         {
             if (ModelState.IsValid)
             {
+                productImage.Image = UploadedFile(productImage);
+
                 _context.Add(productImage);
                 await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
+                return RedirectToAction(nameof(productImage), nameof(Index), int.Parse(productImage.ProductId));
             }
             return View(productImage);
         }
+
+        private string UploadedFile(productImage productImage)
+        {
+            string relativePath = null;
+
+            if (productImage.img != null)
+            {
+                string directoryPah = "images/product";
+                Directory.CreateDirectory(Path.Combine("wwwroot/", directoryPah));
+
+                relativePath = Path.Combine(directoryPah, productImage.Id + productImage.img.FileName);
+                string filePath = Path.Combine("wwwroot/", relativePath);
+                using (var fileStream = new FileStream(filePath, FileMode.Create))
+                {
+                    productImage.img.CopyTo(fileStream);
+                }
+            }
+
+            return relativePath;
+        }
+
+        private void RemoveImg(string path)
+        {
+            string filePath = Path.Combine("wwwroot/", path);
+            if (System.IO.File.Exists(filePath))
+                System.IO.File.Delete(filePath);
+        }
+
 
         // GET: productImages/Edit/5
         public async Task<IActionResult> Edit(int? id)
@@ -86,7 +132,7 @@ namespace WebApplication2.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,Image")] productImage productImage)
+        public async Task<IActionResult> Edit(int id, productImage productImage)
         {
             if (id != productImage.Id)
             {
@@ -97,6 +143,11 @@ namespace WebApplication2.Controllers
             {
                 try
                 {
+                    string OldImgPath = (await _context.productImage.AsNoTracking().FirstOrDefaultAsync(x => x.Id == id)).Image;
+
+                    RemoveImg(OldImgPath);
+                    productImage.Image = UploadedFile(productImage); 
+                    
                     _context.Update(productImage);
                     await _context.SaveChangesAsync();
                 }
@@ -111,7 +162,7 @@ namespace WebApplication2.Controllers
                         throw;
                     }
                 }
-                return RedirectToAction(nameof(Index));
+                return RedirectToAction(nameof(Index), new { id = int.Parse(productImage.ProductId)});
             }
             return View(productImage);
         }
@@ -140,6 +191,8 @@ namespace WebApplication2.Controllers
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
             var productImage = await _context.productImage.FindAsync(id);
+            RemoveImg(productImage.Image);
+
             _context.productImage.Remove(productImage);
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
@@ -148,6 +201,14 @@ namespace WebApplication2.Controllers
         private bool productImageExists(int id)
         {
             return _context.productImage.Any(e => e.Id == id);
+        }
+
+        private void PopulateProductstsDropDownList(object selectedDepartment = null)
+        {
+            var departmentsQuery = from d in _context.Prodact
+                                   orderby d.Name
+                                   select d;
+            ViewBag.Products = new SelectList(departmentsQuery, "Id", "Name", selectedDepartment);
         }
     }
 }

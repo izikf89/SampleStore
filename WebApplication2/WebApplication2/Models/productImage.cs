@@ -4,6 +4,8 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel;
+using System.ComponentModel.DataAnnotations.Schema;
+using Microsoft.AspNetCore.Http;
 
 namespace WebApplication2.Models
 {
@@ -14,6 +16,13 @@ namespace WebApplication2.Models
 
         [DisplayName("תמונה")]
         public string Image { get; set; }
+
+        [Required(ErrorMessage = "בחר תמונה")]
+        [NotMapped]
+        public IFormFile img { get; set; }
+
+        [DisplayName("תמונה1")]
+        public string ProductId { get; set; }
 
     }
 }

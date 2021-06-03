@@ -18,13 +18,18 @@ namespace WebApplication2.Models
         [Required]
         public string Name { get; set; }
 
-        [Required(ErrorMessage = "Please choose profile image")]        
+        [Required(ErrorMessage = "בחר תמונה")]        
         [NotMapped]
         public IFormFile img { get; set; }
 
         [DisplayName("תמונה")]
         public string imgPath { get; set; }
 
-        public List<Product> Prodacts { get; set; } //M2M
+        public List<Product> Prodacts { get; set; } = new List<Product>(); //M2M
+
+        [Required(ErrorMessage = "בחר מוצר")]
+        [DisplayName("בחר מוצר")]
+        [NotMapped]
+        public List<int> ProductIdList { get; set; } //M2M
     }
 }

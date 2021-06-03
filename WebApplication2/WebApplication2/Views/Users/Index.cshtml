@@ -6,9 +6,8 @@
 
 <h1 style="text-align: center;">משתמשים</h1>
 
-@*<p>
-    <a asp-action="Create">Create New</a>
-</p>*@
+<input id="usersSearch" class="form-control mr-sm-2" type="search" placeholder="חיפוש" aria-label="Search" style="width: 250px; margin-bottom: 15px; display: inline-block;">
+
 <table class="table">
     <thead>
         <tr>
@@ -25,30 +24,53 @@
         </tr>
     </thead>
     <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.Name)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Password)
-            </td>
-            <td>
-                @switch (item.Type)
-                {
-                    case TypeUser.admin:
-                        <span>מנהל</span>
-                        break;
-                    case TypeUser.client:
-                        <span>לקוח</span>
-                        break;
-                }
-            </td>
-            <td>
-                <a class="btn btn-primary btn-sm" asp-action="Edit" asp-route-id="@item.Id">עריכה</a>
-                <a class="btn btn-danger btn-sm" asp-action="Delete" asp-route-id="@item.Id">מחיקה</a>
-            </td>
-        </tr>
-}
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Name)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Password)
+                </td>
+                <td>
+                    @switch (item.Type)
+                    {
+                        case TypeUser.admin:
+                            <span>מנהל</span>
+                            break;
+                        case TypeUser.client:
+                            <span>לקוח</span>
+                            break;
+                    }
+                </td>
+                <td>
+                    <a class="btn btn-primary btn-sm" asp-action="Edit" asp-route-id="@item.Id">עריכה</a>
+                    <a class="btn btn-danger btn-sm" asp-action="Delete" asp-route-id="@item.Id">מחיקה</a>
+                </td>
+            </tr>
+        }
     </tbody>
 </table>
+
+<script id="users-template">
+   <tr>
+        <td>
+           {name}
+        </td>
+        <td>
+           {password}
+        </td>
+        <td>
+           {type}
+        </td>
+        <td>
+           <a class="btn btn-primary btn-sm" href='\Users\Edit\{id}'>עריכה</a>
+           <a class="btn btn-danger btn-sm" href='\Users\Delete\{id}'>מחיקה</a>
+        </td>
+    </tr>
+</script>
+
+@section Scripts {
+    <script src="~/js/search.js" asp-append-version="true"></script>
+}

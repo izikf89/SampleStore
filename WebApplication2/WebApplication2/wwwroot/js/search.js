@@ -49,4 +49,20 @@
             }
         })
     });
+
+    $('#usersSearch').keyup(function () {
+        var t = $(this);
+        var currentUrlArr = window.location.href.split('/');
+        var categoryId = currentUrlArr[currentUrlArr.length - 1];
+        search(t.val(), '/Users/Search?query=', 'tbody', '#users-template', 'type', function (type) {
+            switch (status) {
+                case 0:
+                    return "לקוח";
+                    break;
+                case 1:
+                    return "מנהל";
+                    break;
+            }
+        });
+    });
 });

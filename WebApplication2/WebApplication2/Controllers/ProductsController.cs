@@ -27,6 +27,21 @@ namespace WebApplication2.Controllers
             return View(await _context.Prodact.ToListAsync());
         }
 
+        // GET: Search Products
+        public async Task<IActionResult> Search(string query)
+        {
+            if (String.IsNullOrEmpty(query))
+            {
+                return Json(await _context.Prodact.ToListAsync());
+            }
+
+            var filteredProduct = from product in _context.Prodact
+                                  where product.Name.Contains(query) || product.Price.ToString().Contains(query)
+                                  select product;
+
+            return Json(await filteredProduct.ToListAsync());
+        }
+
         // GET: Products/Details/5
         public async Task<IActionResult> Details(int? id)
         {

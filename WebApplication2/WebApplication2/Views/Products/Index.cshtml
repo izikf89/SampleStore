@@ -7,10 +7,13 @@
 
 <h1 style="text-align: center;">מוצרים</h1>
 
-<p>
-    <a class="btn btn-primary" asp-action="Create">יצירת מוצר</a>
-    <a class="btn btn-primary" asp-controller="productImages" asp-action="Create">הוסף תמונה</a>
-</p>
+<div style="display: flex; justify-content: space-between;">
+    <input id="itemsSearch" class="form-control mr-sm-2" type="search" placeholder="חיפוש" aria-label="Search" style="width: 250px; margin-bottom: 15px; display: inline-block;">
+    <div>
+        <a class="btn btn-primary" asp-action="Create">יצירת מוצר</a>
+        <a class="btn btn-primary" asp-controller="productImages" asp-action="Create">הוסף תמונה</a>
+    </div>
+</div>
 <table class="table">
     <thead>
         <tr>
@@ -24,21 +27,41 @@
         </tr>
     </thead>
     <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.Name)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Price)
-            </td>
-            <td>
-                <a class="btn btn-primary btn-sm" asp-action="Edit" asp-route-id="@item.Id">עריכה</a>
-                @*<a class="btn btn-primary btn-sm" asp-controller="productImages" asp-action="Index" asp-route-id="@item.Id">ערוך תמונות</a>*@
-                @*<a class="btn btn-secondary btn-sm" asp-action="Details" asp-route-id="@item.Id">פרטים</a>*@
-                <a class="btn btn-danger btn-sm" asp-action="Delete" asp-route-id="@item.Id">מחיקה</a>
-            </td>
-        </tr>
-}
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Name)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Price)
+                </td>
+                <td>
+                    <a class="btn btn-primary btn-sm" asp-action="Edit" asp-route-id="@item.Id">עריכה</a>
+                    @*<a class="btn btn-primary btn-sm" asp-controller="productImages" asp-action="Index" asp-route-id="@item.Id">ערוך תמונות</a>*@
+                    @*<a class="btn btn-secondary btn-sm" asp-action="Details" asp-route-id="@item.Id">פרטים</a>*@
+                    <a class="btn btn-danger btn-sm" asp-action="Delete" asp-route-id="@item.Id">מחיקה</a>
+                </td>
+            </tr>
+        }
     </tbody>
 </table>
+
+<script id="items-template">
+    <tr>
+        <td>
+            {name}
+        </td>
+        <td>
+            {price}
+        </td>
+        <td>
+            <a class="btn btn-primary btn-sm" href="/Products/Edit/{id}">עריכה</a>
+            <a class="btn btn-danger btn-sm" href="/Products/Delete/{id}">מחיקה</a>
+        </td>
+    </tr>
+</script>
+
+@section Scripts {
+    <script src="~/js/search.js" asp-append-version="true"></script>
+}

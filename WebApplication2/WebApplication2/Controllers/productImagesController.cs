@@ -80,12 +80,12 @@ namespace WebApplication2.Controllers
                 _context.Add(productImage);
                 await _context.SaveChangesAsync();
                 
-                Product product = _context.Prodact.Single(x => x.Id == productImage.Id);
-                product.Pictuers.Add(productImage);
+                //Product product = _context.Prodact.Single(x => x.Id == productImage.Id);
+                //product.Pictuers.Add(productImage);
 
-                await _context.SaveChangesAsync();
+                //await _context.SaveChangesAsync();
 
-                return RedirectToAction(nameof(Index), nameof(Product), new { id = productImage.Id });
+                return RedirectToAction(nameof(Index), "Products");
             }
             return View(productImage);
         }

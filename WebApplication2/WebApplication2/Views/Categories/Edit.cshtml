@@ -5,50 +5,53 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h1>עריכה</h1>
+<h1 style="text-align: right;">עריכה</h1>
 
-<h4>קטגוריה</h4>
+<h4 style="text-align: right;">קטגוריה</h4>
 <hr />
 <div class="row">
     <div class="col-md-4">
-        <form enctype="multipart/form-data"  asp-action="Edit">
+        <form enctype="multipart/form-data" asp-action="Edit">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <input type="hidden" asp-for="CategoryId" />
             <div class="form-group">
                 <label asp-for="Name" class="control-label"></label>
                 <input asp-for="Name" class="form-control" />
                 <span asp-validation-for="Name" class="text-danger"></span>
-            </div>                    
-			<div class="form-group">
-				<label asp-for="img" class="control-label"></label>
-				<div class="custom-file">
-					<input asp-for="img" class="custom-file-input" id="customFile">
-					<label class="custom-file-label" for="customFile">תמונה חדשה</label>
-				</div>
-				<span asp-validation-for="img" class="text-danger"></span>
-			</div>
-			<div class="form-group">
-				<label for="imgDisplay" class="control-label">תמונה נוכחית</label>				
-                <img width="50" src="/@Model.imgPath" />					
-			</div>
+            </div>
             <div class="form-group">
-                <input type="submit" value="שמירה" class="btn btn-primary" />
+                <label asp-for="img" class="control-label"></label>
+                <div class="custom-file">
+                    <input asp-for="img" class="custom-file-input" id="customFile">
+                    <label class="custom-file-label" for="customFile">תמונה חדשה</label>
+                </div>
+                <span asp-validation-for="img" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label for="imgDisplay" class="control-label">תמונה נוכחית</label>
+                <img width="50" src="/@Model.imgPath" />
+            </div>
+            <div class="form-group action-buttons">
+                <input type="submit" value="שמירה" class="btn btn-primary save" />
+                <div>
+                    <a class="btn btn-secondary" asp-action="Index">ביטול</a>
+                </div>
             </div>
         </form>
     </div>
     <div class="col-md-4">
         <form asp-action="AddProduct">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <input type="hidden" asp-for="CategoryId" />        
-            <input type="hidden" asp-for="Name" />        
-            <input type="hidden" asp-for="imgPath" />        
-            <input type="hidden" asp-for="Prodacts" />        
+            <input type="hidden" asp-for="CategoryId" />
+            <input type="hidden" asp-for="Name" />
+            <input type="hidden" asp-for="imgPath" />
+            <input type="hidden" asp-for="Prodacts" />
             <div class="form-group">
                 <label asp-for="ProductIdList" class="control-label"></label>
-                <select asp-for="ProductIdList" multiple="multiple" asp-items="ViewBag.Products" class="form-control" >
+                <select asp-for="ProductIdList" multiple="multiple" asp-items="ViewBag.Products" class="form-control">
                 </select>
                 <span asp-validation-for="ProductIdList" class="text-danger"></span>
-            </div>       
+            </div>
             <div class="form-group">
                 <input type="submit" value="הוסף מוצר" class="btn btn-primary" />
             </div>
@@ -57,26 +60,30 @@
     <div class="col-md-4">
         <form asp-action="DeleteProduct">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <input type="hidden" asp-for="CategoryId" />        
-            <input type="hidden" asp-for="Name" />        
-            <input type="hidden" asp-for="imgPath" />        
-            <input type="hidden" asp-for="Prodacts" />        
+            <input type="hidden" asp-for="CategoryId" />
+            <input type="hidden" asp-for="Name" />
+            <input type="hidden" asp-for="imgPath" />
+            <input type="hidden" asp-for="Prodacts" />
             <div class="form-group">
                 <label asp-for="ProductIdList" class="control-label"></label>
-                <select asp-for="ProductIdList" multiple="multiple" asp-items="ViewBag.MyProducts" class="form-control" >
+                <select asp-for="ProductIdList" multiple="multiple" asp-items="ViewBag.MyProducts" class="form-control">
                 </select>
                 <span asp-validation-for="ProductIdList" class="text-danger"></span>
-            </div>       
+            </div>
             <div class="form-group">
                 <input type="submit" value="מחק מוצר" class="btn btn-primary" />
             </div>
         </form>
     </div>
 </div>
-
-<div>
-    <a asp-action="Index">חזרה לרשימת קטגוריות</a>
-</div>
+<style>
+    .action-buttons {
+        display: flex;
+    }
+    .save {
+        margin-left: 10px;
+    }
+</style>
 
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}

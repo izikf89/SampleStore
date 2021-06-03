@@ -1,80 +1,110 @@
 ﻿@model WebApplication2.Models.Category
 
 @{
-	ViewData["Title"] = "Details";
-	Layout = "~/Views/Shared/_Layout.cshtml";
+    ViewData["Title"] = "Details";
+    Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
 <h1>@Html.DisplayFor(model => model.Name)</h1>
 <div class="row">
-	<img  width="50" class="category-image" src="/@Model.imgPath" />
-	<h4>רשימת מוצרים</h4>
-	<hr />
+    <img width="50" class="category-image" src="/@Model.imgPath" />
+    <h4>רשימת מוצרים</h4>
+    <hr />
 </div>
 
-<table class="table">
-	<thead>
-		<tr>
-			<th>
-				@Html.DisplayNameFor(model => model.Name)
-			</th>
-			<th>
-				מחיר
-			</th>
-			<th></th>
-			<th></th>
-		</tr>
-	</thead>
-	<tbody>
-		@foreach (var item in Model.Prodacts)
-		{
-			<tr>
-				<td>
-					@Html.DisplayFor(modelItem => item.Name)
-				</td>
-				<td>
-					@Html.DisplayFor(modelItem => item.Price)
-				</td>
-				<td>
-					<img width="50" src="/@item.Pictuers?.FirstOrDefault().Image" />
-				</td>
-				<td>
-					@if (User.IsInRole(nameof(TypeUser.client)))
-					{
-						<button class="btn btn-info" onClick='addToCart(@item.Id)'>הוסף לעגלה</button>
-					}
-				</td>
-			</tr>
-		}
+@foreach (var item in Model.Prodacts)
+{
+    <div class="item-container">
+        <div class="item">
+            <img class="item-image" src="/@item.Pictuers?.FirstOrDefault().Image" />
+            <div class="item-details">
+                <div class="item-name">
+                    <span>@Html.DisplayFor(modelItem => item.Name)</span>
+                </div>
+                <div>
+                    <span>מחיר:</span>
+                    <span>
+                        @Html.DisplayFor(modelItem => item.Price)
+                    </span>
+                    <span>ש"ח</span>
+                </div>
+            </div>
+            @if (User.IsInRole(nameof(TypeUser.client)))
+            {
+                <button class="btn btn-info add-to-cart " onClick='addToCart(@item.Id)'>הוסף לעגלה</button>
+            }
+        </div>
+    </div>
+}
 
-	</tbody>
-</table>
 <div>
-	@*<a asp-action="Edit" asp-route-id="@Model.CategoryId">Edit</a> |*@
-	<a asp-action="Index">חזור לקטגוריות</a>
+    <a asp-action="Index">חזור לקטגוריות</a>
 </div>
 
+<style>
+    * {
+        text-align: right;
+    }
+    .item-container {
+        width: calc(33% - 50px);
+        margin-left: 50px;
+        margin: 50px 0;
+        position: relative;
+    }
+    .item {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: space-around;
+        background-color: #eaeded;
+        width: 300px;
+        height: 300px;
+        padding: 20px;
+        box-sizing: content-box;
+        border-radius: 15px;
+    }
+    .item:hover {
+        box-shadow: 0px 0px 23px 5px rgba(0,0,0,0.43);
+    }
+    .item-image {
+        width: 200px;
+    }
+    .item-details {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        font-size: 20px;
+        font-weight: 500;
+    }
+    .item-name {
+        text-align: center;
+    }
+    .add-to-cart {
+        margin-top: 15px;
+        font-size: 14px;
+    }
+</style>
 
 
 @section Scripts
 {
-	<script>
-		function addToCart(productId) {
-			$.ajax({
-				url: "/Orders/AddToShoppingCart?productId=" + productId,
-				type: "POST",
-				cache: false,
-				async: true,
-				success: function (data) {
-					console.log(data)
-					alert("המוצר נוסף בהצלחה");
-				},
-				error: function (data) {
-					console.log(data)
-					const msg = (data.status === 401) ? "אתה לא מחובר" : "אירעה שגיאה";
-					alert(msg);
-				},
-			});
-		}
-	</script>
+    <script>
+        function addToCart(productId) {
+            $.ajax({
+                url: "/Orders/AddToShoppingCart?productId=" + productId,
+                type: "POST",
+                cache: false,
+                async: true,
+                success: function (data) {
+                    console.log(data)
+                    alert("המוצר נוסף בהצלחה");
+                },
+                error: function (data) {
+                    console.log(data)
+                    const msg = (data.status === 401) ? "אתה לא מחובר" : "אירעה שגיאה";
+                    alert(msg);
+                },
+            });
+        }
+    </script>
 } 

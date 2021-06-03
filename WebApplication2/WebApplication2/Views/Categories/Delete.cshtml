@@ -7,28 +7,56 @@
 
 <h1>מחיקה</h1>
 
-<h3>האם אתה בטוח שברצונך למחוק?</h3>
+<h3>האם אתה בטוח שברצונך למחוק את הקטגוריה?</h3>
 <div>
-    <h4>קטגוריה</h4>
     <hr />
-    <dl class="row">
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Name)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Name)
-        </dd>
-		<dt class="col-sm-2">			
-			@Html.DisplayNameFor(model => model.imgPath)
-		</dt>
-		<dd class="col-sm-10">
-			<img height="40" width="40" src="/@Model.imgPath" />
-		</dd>
-    </dl>
-    
-    <form asp-action="Delete">
-        <input type="hidden" asp-for="CategoryId" />
-        <input type="submit" value="מחיקה" class="btn btn-danger" /> |
-        <a asp-action="Index">חזור לרשימת הקטגוריות</a>
-    </form>
+    <div class="category">
+        <div class="category-detailes">
+            <img class="category-image" src="/@Model.imgPath" />
+            <div class="category-name">
+                @Html.DisplayFor(model => model.Name)
+            </div>
+        </div>
+        <form class="form-delete" asp-action="Delete">
+            <input type="hidden" asp-for="CategoryId" />
+            <input type="submit" value="מחיקה" class="btn btn-danger delete" />
+            <a asp-action="Index" class="btn btn-secondary">ביטול</a>
+        </form>
+    </div>
+
+    <style>
+        * {
+            text-align: right;
+        }
+        .category {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            width: fit-content;
+            border: 1px solid;
+            border-radius: 15px;
+            padding: 25px;
+        }
+        .category-detailes {
+            display: flex;
+            align-items: center;
+            width: fit-content;
+        }
+        .category-image {
+            max-height: 250px;
+            width: 200px;
+            margin-left: 15px;
+        }
+        .category-name {
+            font-size: 21px;
+            font-weight: bold;
+        }
+        .form-delete {
+            align-self: flex-start;
+            margin-top: 15px;
+        }
+        .delete {
+            margin-left: 10px;
+        }
+    </style>
 </div>

@@ -2,36 +2,39 @@
 @using Microsoft.AspNetCore.Authorization
 @inject IAuthorizationService AuthorizationService
 @{
-	ViewData["Title"] = "Index";
-	Layout = "~/Views/Shared/_Layout.cshtml";
+    ViewData["Title"] = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
 <h1 style="text-align: center;">קטגוריות</h1>
 
-<p style="text-align: right;">
-	<a class="button big" asp-action="Create">צור קטגוריה חדשה</a>
-</p>
+@if (User.Identity.IsAuthenticated && User.IsInRole(nameof(TypeUser.admin)))
+{
+    <p style="text-align: right;">
+        <a class="btn btn-primary" asp-action="Create">צור קטגוריה חדשה</a>
+    </p>
+}
 <div class="categories">
-	@foreach (var item in Model)
-	{
-	<div class="category-container">
-		<a class="category" asp-action="Details" asp-route-id="@item.CategoryId">
-			<div class="category-name">
-				@Html.DisplayFor(modelItem => item.Name)
-			</div>
-			<div>
-				<img class="category-image" src="@item.imgPath" />
-			</div>
-		</a>
-		<div class="action-buttons">
-			@if (User.Identity.IsAuthenticated && User.IsInRole(nameof(TypeUser.admin)))
-			{
-				<a class="button" asp-action="Edit" asp-route-id="@item.CategoryId">עריכה</a>
-				<a  class="button" asp-action="Delete" asp-route-id="@item.CategoryId">מחיקה</a>
-			}
-		</div>
-	</div>
-	}
+    @foreach (var item in Model)
+    {
+        <div class="category-container">
+            <a class="category" asp-action="Details" asp-route-id="@item.CategoryId">
+                <div class="category-name">
+                    @Html.DisplayFor(modelItem => item.Name)
+                </div>
+                <div>
+                    <img class="category-image" src="@item.imgPath" />
+                </div>
+            </a>
+            <div class="action-buttons">
+                @if (User.Identity.IsAuthenticated && User.IsInRole(nameof(TypeUser.admin)))
+                {
+                    <a class="btn btn-primary btn-sm" asp-action="Edit" asp-route-id="@item.CategoryId">עריכה</a>
+                    <a class="btn btn-danger btn-sm" asp-action="Delete" asp-route-id="@item.CategoryId">מחיקה</a>
+                }
+            </div>
+        </div>
+    }
 </div>
 
 
@@ -40,15 +43,15 @@
         color: inherit;
     }
 
-    a:hover {
-        color: inherit;
-        text-decoration: none;
-    } 
+        a:hover {
+            color: inherit;
+            text-decoration: none;
+        }
 
-	.categories {
-		display: flex;
-		flex-wrap: wrap;
-	}
+    .categories {
+        display: flex;
+        flex-wrap: wrap;
+    }
 
     .category-container {
         width: calc(33% - 50px);
@@ -74,41 +77,23 @@
         cursor: pointer;
     }
 
-    .category:hover {
-        box-shadow: 0px 0px 23px 5px rgba(0,0,0,0.43);
+        .category:hover {
+            box-shadow: 0px 0px 23px 5px rgba(0,0,0,0.43);
+        }
+
+    .category-name {
+        font-size: 23px;
+        margin-left: 15px;
     }
 
-	.category-name {
-		font-size: 23px;
-		margin-left: 15px;
-	}
-
-	.category-image {
-		max-height: 200px;
-		width: 250px;
-	}
-
-    .button {
-        color: white;
-        padding: 2px 6px;
-        background: #0078fa;
-        border-radius: 15px;
-        text-decoration: none;
+    .category-image {
+        max-height: 200px;
+        width: 250px;
     }
 
-	.button:hover {
-		color: white;
-		background: #0056b3;
-		text-decoration: none;
-	}
-
-    .button.big {
-        padding: 7px 10px;
+    tr {
+        text-align: right;
     }
-
-	tr {
-		text-align: right;
-	}
 
     .action-buttons {
         margin-top: 7px;

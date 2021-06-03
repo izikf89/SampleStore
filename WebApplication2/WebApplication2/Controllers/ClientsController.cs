@@ -5,6 +5,7 @@ using System.Security.Claims;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
@@ -96,15 +97,10 @@ namespace WebApplication2.Controllers
         }
 
 
-
-
-
         public IActionResult Register()
         {
             return View();
         }
-
-
 
         // POST: Users/Create
         // To protect from overposting attacks, enable the specific properties you want to bind to.
@@ -112,7 +108,6 @@ namespace WebApplication2.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Register([Bind("Telephone,E_Mail,Id,Name,Password,Type")] Client client)
-
         {
             var q = from a in _context.Client
                     where a.Name == client.Name
@@ -143,13 +138,14 @@ namespace WebApplication2.Controllers
         }
 
 
-
+        [Authorize(Roles = nameof(TypeUser.admin))]
         // GET: Clients
         public async Task<IActionResult> Index()
         {
             return View(await _context.Client.ToListAsync());
         }
 
+        [Authorize(Roles = nameof(TypeUser.admin))]
         // GET: Clients/Details/5
         public async Task<IActionResult> Details(int? id)
         {
@@ -168,12 +164,14 @@ namespace WebApplication2.Controllers
             return View(client);
         }
 
+        [Authorize(Roles = nameof(TypeUser.admin))]
         // GET: Clients/Create
         public IActionResult Create()
         {
             return View();
         }
 
+        [Authorize(Roles = nameof(TypeUser.admin))]
         // POST: Clients/Create
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
@@ -190,6 +188,7 @@ namespace WebApplication2.Controllers
             return View(client);
         }
 
+        [Authorize(Roles = nameof(TypeUser.admin))]
         // GET: Clients/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
@@ -206,6 +205,7 @@ namespace WebApplication2.Controllers
             return View(client);
         }
 
+        [Authorize(Roles = nameof(TypeUser.admin))]
         // POST: Clients/Edit/5
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
@@ -241,6 +241,7 @@ namespace WebApplication2.Controllers
             return View(client);
         }
 
+        [Authorize(Roles = nameof(TypeUser.admin))]
         // GET: Clients/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
@@ -259,6 +260,7 @@ namespace WebApplication2.Controllers
             return View(client);
         }
 
+        [Authorize(Roles = nameof(TypeUser.admin))]
         // POST: Clients/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]

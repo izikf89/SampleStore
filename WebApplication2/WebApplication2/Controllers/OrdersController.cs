@@ -36,6 +36,10 @@ namespace WebApplication2.Controllers
         {
             return int.Parse(((ClaimsIdentity)User.Identity).FindFirst("Id").Value);
         }
+        private string GetUserRole()
+        {
+            return ((ClaimsIdentity)User.Identity).Claims.Where(c => c.Type == ClaimTypes.Role).Select(c => c.Value).FirstOrDefault();
+        }
 
         [HttpPost]
         public async Task<IActionResult> AddToShoppingCart(int productId)
@@ -70,7 +74,7 @@ namespace WebApplication2.Controllers
 
             await _context.SaveChangesAsync();
 
-            return RedirectToAction( nameof(Index), "Home", new { id = 1 });
+            return RedirectToAction(nameof(Index), "Home", new { id = 1 });
         }
 
         [HttpGet]
@@ -123,13 +127,18 @@ namespace WebApplication2.Controllers
 
             int userId = GetUserId();
 
-            var order = await _context.Order.Include(o=> o.Prodacts)
-                .SingleAsync(m => m.Id == id && m.user.Id == userId);
 
-            await Task.WhenAll(order.Prodacts.Select(async product => {
-                var temp = await _context.Prodact.Include(x => x.Pictuers).SingleAsync(m => m.Id == product.Id);
+            Order order;
+            if (GetUserRole() == nameof(TypeUser.admin))
+                order = await _context.Order.Include(o => o.Prodacts).SingleAsync(m => m.Id == id);
+            else
+                order = await _context.Order.Include(o => o.Prodacts).SingleAsync(m => m.Id == id && m.user.Id == userId);
+
+            order.Prodacts.ForEach(product =>
+            {
+                var temp =  _context.Prodact.Include(x => x.Pictuers).Single(m => m.Id == product.Id);
                 product.Pictuers = temp.Pictuers;
-            }));
+            });
 
             //AddProducts(order);
             if (order == null)

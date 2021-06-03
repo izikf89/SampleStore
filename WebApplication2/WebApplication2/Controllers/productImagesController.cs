@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
@@ -11,6 +12,7 @@ using WebApplication2.Models;
 
 namespace WebApplication2.Controllers
 {
+    [Authorize(Roles = nameof(TypeUser.admin))]
     public class productImagesController : Controller
     {
         private readonly WebApplication2Context _context;
@@ -26,7 +28,6 @@ namespace WebApplication2.Controllers
             if (id == null)
             {
                 return View(await _context.productImage.ToListAsync());
-
             }
 
             var productImages = await _context.productImage
@@ -84,9 +85,7 @@ namespace WebApplication2.Controllers
 
                 await _context.SaveChangesAsync();
 
-
-
-                return RedirectToAction(nameof(productImage), nameof(Index), new { id = productImage.Id });
+                return RedirectToAction(nameof(Index), nameof(Product), new { id = productImage.Id });
             }
             return View(productImage);
         }

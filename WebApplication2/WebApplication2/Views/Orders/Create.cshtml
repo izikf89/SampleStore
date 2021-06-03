@@ -20,7 +20,12 @@
             </div>
             <div class="form-group">
                 <label asp-for="Status" class="control-label"></label>
-                <select asp-for="Status" class="form-control"></select>
+				<select asp-for="Status" class="form-control">
+					<option value="@OrderStatuses.OPEN">פתוח</option>
+					<option value="@OrderStatuses.WAITING">ממתין לטיפול</option>
+					<option value="@OrderStatuses.IN_PROCESS">בטיפול</option>
+					<option value="@OrderStatuses.CLOSE">סגור</option>
+				</select>
                 <span asp-validation-for="Status" class="text-danger"></span>
             </div>
             <div class="form-group">

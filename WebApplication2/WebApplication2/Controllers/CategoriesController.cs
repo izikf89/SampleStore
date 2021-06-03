@@ -4,6 +4,7 @@ using System.IO;
 using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
@@ -33,8 +34,9 @@ namespace WebApplication2.Controllers
             ViewBag.Products = new SelectList(departmentsQuery, "Id", "Name");
 
             ViewBag.MyProducts = new SelectList(category.Prodacts, "Id", "Name");
-        }       
+        }
 
+        [Authorize(Roles = nameof(TypeUser.admin))]
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(Category category)
@@ -102,12 +104,14 @@ namespace WebApplication2.Controllers
             return View(category);
         }
 
+        [Authorize(Roles = nameof(TypeUser.admin))]
         // GET: Categories/Create
         public IActionResult Create()
         {
             return View();
         }
 
+        [Authorize(Roles = nameof(TypeUser.admin))]
         // GET: Categories/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
@@ -128,6 +132,7 @@ namespace WebApplication2.Controllers
             return View(category);
         }
 
+        [Authorize(Roles = nameof(TypeUser.admin))]
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> AddProduct(Category category)
@@ -142,6 +147,7 @@ namespace WebApplication2.Controllers
             return RedirectToAction(nameof(Edit), new { id = category.CategoryId });
         }
 
+        [Authorize(Roles = nameof(TypeUser.admin))]
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteProduct(Category category)
@@ -161,6 +167,7 @@ namespace WebApplication2.Controllers
             return RedirectToAction(nameof(Edit), new { id = category.CategoryId });
         }
 
+        [Authorize(Roles = nameof(TypeUser.admin))]
         // POST: Categories/Edit/5
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
@@ -204,6 +211,7 @@ namespace WebApplication2.Controllers
             return View(category);
         }
 
+        [Authorize(Roles = nameof(TypeUser.admin))]
         // GET: Categories/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
@@ -222,6 +230,7 @@ namespace WebApplication2.Controllers
             return View(category);
         }
 
+        [Authorize(Roles = nameof(TypeUser.admin))]
         // POST: Categories/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]

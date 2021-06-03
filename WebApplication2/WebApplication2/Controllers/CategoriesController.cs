@@ -23,6 +23,16 @@ namespace WebApplication2.Controllers
             webHostEnvironment = hostEnvironment;
         }
 
+        private void GetProducts(Category category)
+        {
+            var departmentsQuery = from d in _context.Prodact
+                                   where d.Categories.All(x => x.CategoryId != category.CategoryId)
+                                   orderby d.Name
+                                   select d;
+            ViewBag.Products = new SelectList(departmentsQuery, "Id", "Name");
+
+            ViewBag.MyProducts = new SelectList(category.Prodacts, "Id", "Name");
+        }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
@@ -30,9 +40,7 @@ namespace WebApplication2.Controllers
         {
             if (ModelState.IsValid)
             {
-                string uniqueFileName = UploadedFile(category);
-
-                category.imgPath = uniqueFileName;
+                category.imgPath = UploadedFile(category);
 
                 _context.Add(category);
                 await _context.SaveChangesAsync();
@@ -47,7 +55,10 @@ namespace WebApplication2.Controllers
 
             if (category.img != null)
             {
-                relativePath = Path.Combine("images/categories", category.CategoryId + category.img.FileName);
+                string directoryPah = "images/categories";
+                Directory.CreateDirectory(Path.Combine("wwwroot/", directoryPah));
+
+                relativePath = Path.Combine(directoryPah, category.CategoryId + category.img.FileName);
                 string filePath = Path.Combine("wwwroot/", relativePath);
                 using (var fileStream = new FileStream(filePath, FileMode.Create))
                 {
@@ -80,10 +91,13 @@ namespace WebApplication2.Controllers
 
             var category = await _context.Category
                 .FirstOrDefaultAsync(m => m.CategoryId == id);
+
             if (category == null)
             {
                 return NotFound();
             }
+
+            AddProducts(category);
 
             return View(category);
         }
@@ -119,11 +133,48 @@ namespace WebApplication2.Controllers
             }
 
             var category = await _context.Category.FindAsync(id);
+            AddProducts(category);
+
             if (category == null)
             {
                 return NotFound();
             }
+
+            GetProducts(category);
             return View(category);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> AddProduct(Category category)
+        {
+            //AddProducts(category);
+            List<Product> prodacts = await _context.Prodact.Where(p => category.ProductIdList.Contains(p.Id)).ToListAsync();
+            category.Prodacts = category.Prodacts.Concat(prodacts).ToList();
+
+            _context.Update(category);
+            await _context.SaveChangesAsync();
+
+            return RedirectToAction(nameof(Edit), new { id = category.CategoryId });
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> DeleteProduct(Category category)
+        {
+            //AddProducts(category);
+            //category.Prodacts = category.Prodacts.Where(p => !category.ProductIdList.Contains(p.Id)).ToList();
+            //var prod = await _context.Prodact.Where(x => category.ProductIdList.Contains(x.Id)).ToListAsync();
+
+
+            var categoryDb =  _context.Category.Include(x => x.Prodacts).Single(x=> x.CategoryId == category.CategoryId);//   category.CategoryId);
+            categoryDb. Prodacts.RemoveAll(x => category.ProductIdList.Contains(x.Id));
+
+
+            //_context.Update(category);
+            await _context.SaveChangesAsync();
+
+            return RedirectToAction(nameof(Edit), new { id = category.CategoryId });
         }
 
         // POST: Categories/Edit/5
@@ -146,6 +197,7 @@ namespace WebApplication2.Controllers
 
                     RemoveImg(OldImgPath);
                     category.imgPath = UploadedFile(category);
+                    AddProducts(category);
 
                     _context.Update(category);
                     await _context.SaveChangesAsync();
@@ -200,6 +252,14 @@ namespace WebApplication2.Controllers
         private bool CategoryExists(int id)
         {
             return _context.Category.Any(e => e.CategoryId == id);
+        }
+
+        private void AddProducts(Category category)
+        {
+            var Query = from d in _context.Category
+                        where d.CategoryId == category.CategoryId
+                                   select d.Prodacts;
+            category.Prodacts = Query.FirstOrDefault();
         }
     }
 }

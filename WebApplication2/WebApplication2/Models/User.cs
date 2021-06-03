@@ -14,11 +14,13 @@ namespace WebApplication2.Models
         [Required]
         public int Id { get; set; }
 
-        [Required]
+        [MinLength(2, "מינמום 2 תווים")]
+        [Required("שדה חובה")]
         [DisplayName("שם")]
         public string Name { get; set; }
 
-        [Required]
+        [MinLength(5, "מינמום 5 תווים")]
+        [Required("שדה חובה")]
         [DisplayName("סיסמא")]
         [DataType(DataType.Password)]
         public string Password { get; set; }

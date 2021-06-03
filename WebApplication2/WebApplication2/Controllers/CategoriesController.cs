@@ -95,11 +95,9 @@ namespace WebApplication2.Controllers
             if (category == null)
                 return NotFound();
             
-            var task = category.Prodacts.Select(async product => 
-                product.Pictuers = (await _context.Prodact.Include(x => x.Pictuers).SingleAsync(m => m.Id == product.Id)).Pictuers
+            category.Prodacts.ForEach(product => 
+                product.Pictuers = _context.Prodact.Include(x => x.Pictuers).Single(m => m.Id == product.Id).Pictuers
             );
-
-            await Task.WhenAll(task);
 
             return View(category);
         }

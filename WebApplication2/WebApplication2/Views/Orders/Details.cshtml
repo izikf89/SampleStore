@@ -8,32 +8,32 @@
 <h1>פרטים</h1>
 
 <div>
-    <h4>הזמנה</h4>
-    <hr />
-    <div class="order-detailes">
-        <div>
-            <span class="description">@Html.DisplayNameFor(model => model.Total)</span>:
-            <span>@Html.DisplayFor(model => model.Total)</span>
-        </div>
-        <div>
-            <span class="description">@Html.DisplayNameFor(model => model.Status)</span>:
-            @switch (Model.Status)
-            {
-                case OrderStatuses.OPEN:
-                    <span>פתוח</span>
-                    break;
-                case OrderStatuses.WAITING:
-                    <span>ממתין לטיפול</span>
-                    break;
-                case OrderStatuses.IN_PROCESS:
-                    <span>בטיפול</span>
-                    break;
-                case OrderStatuses.CLOSE:
-                    <span>סגור</span>
-                    break;
-            }
-        </div>
-    </div>
+	<h4>הזמנה</h4>
+	<hr />
+	<div class="order-detailes">
+		<div>
+			<span class="description">@Html.DisplayNameFor(model => model.Total)</span>:
+			<span>@Html.DisplayFor(model => model.Total)</span>
+		</div>
+		<div>
+			<span class="description">@Html.DisplayNameFor(model => model.Status)</span>:
+			@switch (Model.Status)
+			{
+				case OrderStatuses.OPEN:
+					<span>פתוח</span>
+					break;
+				case OrderStatuses.WAITING:
+					<span>ממתין לטיפול</span>
+					break;
+				case OrderStatuses.IN_PROCESS:
+					<span>בטיפול</span>
+					break;
+				case OrderStatuses.CLOSE:
+					<span>סגור</span>
+					break;
+			}
+		</div>
+	</div>
 </div>
 
 <table class="table">
@@ -63,7 +63,7 @@
 					<img width="50" src="/@item.Pictuers?.FirstOrDefault().Image" />
 				</td>
 				<td>
-					<a class="btn btn-danger" asp-action="DleleteFromCart" asp-route-id="@item.Id">הסר</a>
+					<a class="btn btn-danger" asp-action="DleleteFromCart" asp-route-productId="@item.Id" asp-route-orderId="@Model.Id">הסר</a>
 				</td>
 			</tr>
 		}
@@ -72,22 +72,28 @@
 </table>
 
 <div>
-    <a class="btn btn-success" asp-action="FinishOrder" asp-route-id="@Model.Id">סיים הזמנה</a>
-    <a class="btn btn-primary" asp-action="Edit" asp-route-id="@Model.Id">עריכה</a>
-    <a class="btn btn-secondary" asp-action="Index">חזור</a>
+	@if (User.IsInRole(nameof(TypeUser.client)))
+	{
+		<a class="btn btn-success" asp-action="FinishOrder" asp-route-id="@Model.Id">סיים הזמנה</a>
+	}
+	else
+	{
+		<a class="btn btn-primary" asp-action="Edit" asp-route-id="@Model.Id">עריכה</a>
+		<a class="btn btn-secondary" asp-action="Index">חזור</a>
+	}
 </div>
 
 <style>
-    .order-detailes {
-        font-size: 20px;
-        font-weight: 500;
-    }
+	.order-detailes {
+		font-size: 20px;
+		font-weight: 500;
+	}
 </style>
 
 
 @section Scripts
 	{
-		<script>
-			
-		</script>
-	} 
+	<script>
+
+	</script>
+} 

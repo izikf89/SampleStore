@@ -1,11 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Dynamic;
 using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.AspNetCore.Mvc.ViewFeatures;
 using Microsoft.EntityFrameworkCore;
 using WebApplication2.Data;
 using WebApplication2.Models;
@@ -78,12 +80,10 @@ namespace WebApplication2.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> DleleteFromCart(int id)
+        public async Task<IActionResult> DleleteFromCart(int productId, int orderId)
         {
-            int userId = int.Parse(((ClaimsIdentity)User.Identity).FindFirst("Id").Value);
-
-            Product product = await _context.Prodact.FindAsync(id);
-            Order order = await GetCurrentOrder(userId);
+            Product product = await _context.Prodact.FindAsync(productId);
+            Order order = await _context.Order.FindAsync(orderId);
 
             order = _context.Order.Include(x => x.Prodacts).Single(x => x.Id == order.Id);
             order.Prodacts.Remove(product);
@@ -116,6 +116,13 @@ namespace WebApplication2.Controllers
         // GET: Orders
         public async Task<IActionResult> Index()
         {
+            var innerJoinQuery =
+                 from order in _context.Order
+                join client in _context.Client on order.user.Id equals client.Id 
+                select new { Id = order.Id, Status = order.Status, Total = order.Total, ClientName = client.Name }.ToExpando();
+
+            ViewBag.OrdersList = innerJoinQuery.ToList();
+
             return View(await _context.Order.ToListAsync());
         }
 
@@ -127,7 +134,6 @@ namespace WebApplication2.Controllers
 
             int userId = GetUserId();
 
-
             Order order;
             if (GetUserRole() == nameof(TypeUser.admin))
                 order = await _context.Order.Include(o => o.Prodacts).SingleAsync(m => m.Id == id);
@@ -136,7 +142,7 @@ namespace WebApplication2.Controllers
 
             order.Prodacts.ForEach(product =>
             {
-                var temp =  _context.Prodact.Include(x => x.Pictuers).Single(m => m.Id == product.Id);
+                var temp = _context.Prodact.Include(x => x.Pictuers).Single(m => m.Id == product.Id);
                 product.Pictuers = temp.Pictuers;
             });
 
@@ -264,6 +270,18 @@ namespace WebApplication2.Controllers
                         where d.Id == order.Id
                         select d.Prodacts;
             order.Prodacts = Query.FirstOrDefault();
+        }
+    }
+
+    public static class Extensions
+    {
+        public static ExpandoObject ToExpando(this object anonymousObject)
+        {
+            IDictionary<string, object> anonymousDictionary = HtmlHelper.AnonymousObjectToHtmlAttributes(anonymousObject);
+            IDictionary<string, object> expando = new ExpandoObject();
+            foreach (var item in anonymousDictionary)
+                expando.Add(item);
+            return (ExpandoObject)expando;
         }
     }
 }

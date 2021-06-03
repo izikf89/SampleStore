@@ -11,6 +11,8 @@ namespace WebApplication2.Models
 
     public class Order
     {
+        [DisplayName("מספר הזמנה")]
+
         public int Id { get; set; }
 
         [DisplayName("מוצרים")]

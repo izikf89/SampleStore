@@ -21,8 +21,9 @@ namespace WebApplication2.Models
         [NotMapped]
         public IFormFile img { get; set; }
 
-        [DisplayName("תמונה1")]
-        public string ProductId { get; set; }
+        [NotMapped]
+        [DisplayName("מוצר")]
+        public int _ProductId { get; set; }
 
     }
 }

@@ -22,7 +22,7 @@ namespace WebApplication2.Models
         public int Price { get; set; }
 
         [DisplayName("תמונות")]
-        public List<productImage> Pictuers{ get; set; }
+        public List<productImage> Pictuers { get; set; } = new List<productImage>();
 
         //public int CategoryId { get; set; }
         [DisplayName("קטגוריות")]

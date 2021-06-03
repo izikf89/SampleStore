@@ -30,7 +30,7 @@ namespace WebApplication2.Controllers
             }
 
             var productImages = await _context.productImage
-               .Where(m => m.ProductId == id.ToString()).ToListAsync();
+               .Where(m => m.Id == id).ToListAsync();
 
             if (productImages == null)
             {
@@ -78,7 +78,15 @@ namespace WebApplication2.Controllers
 
                 _context.Add(productImage);
                 await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(productImage), nameof(Index), int.Parse(productImage.ProductId));
+                
+                Product product = _context.Prodact.Single(x => x.Id == productImage.Id);
+                product.Pictuers.Add(productImage);
+
+                await _context.SaveChangesAsync();
+
+
+
+                return RedirectToAction(nameof(productImage), nameof(Index), new { id = productImage.Id });
             }
             return View(productImage);
         }
@@ -146,8 +154,8 @@ namespace WebApplication2.Controllers
                     string OldImgPath = (await _context.productImage.AsNoTracking().FirstOrDefaultAsync(x => x.Id == id)).Image;
 
                     RemoveImg(OldImgPath);
-                    productImage.Image = UploadedFile(productImage); 
-                    
+                    productImage.Image = UploadedFile(productImage);
+
                     _context.Update(productImage);
                     await _context.SaveChangesAsync();
                 }
@@ -162,7 +170,7 @@ namespace WebApplication2.Controllers
                         throw;
                     }
                 }
-                return RedirectToAction(nameof(Index), new { id = int.Parse(productImage.ProductId)});
+                return RedirectToAction(nameof(Index), new { id = productImage.Id });
             }
             return View(productImage);
         }
@@ -205,10 +213,10 @@ namespace WebApplication2.Controllers
 
         private void PopulateProductstsDropDownList(object selectedDepartment = null)
         {
-            var departmentsQuery = from d in _context.Prodact
-                                   orderby d.Name
-                                   select d;
-            ViewBag.Products = new SelectList(departmentsQuery, "Id", "Name", selectedDepartment);
+            //var departmentsQuery = from d in _context.Prodact
+            //                       orderby d.Name
+            //                       select d;
+            ViewBag.Products = new SelectList(_context.Prodact.ToList(), "Id", "Name", selectedDepartment);
         }
     }
 }

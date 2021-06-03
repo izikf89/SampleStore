@@ -5,25 +5,11 @@
 	Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h1>Details</h1>
-
-<div>
-	<h4>Category</h4>
+<h1>@Html.DisplayFor(model => model.Name)</h1>
+<div class="row">
+	<img  width="50" class="category-image" src="/@Model.imgPath" />
+	<h4>רשימת מוצרים</h4>
 	<hr />
-	<dl class="row">
-		<dt class="col-sm-2">
-			@Html.DisplayNameFor(model => model.Name)
-		</dt>
-		<dd class="col-sm-10">
-			@Html.DisplayFor(model => model.Name)
-		</dd>
-		<dt class="col-sm-2">
-			@Html.DisplayNameFor(model => model.imgPath)
-		</dt>
-		<dd class="col-sm-10">
-			<img class="category-image" src="/@Model.imgPath" />
-		</dd>
-	</dl>
 </div>
 
 <table class="table">
@@ -50,10 +36,13 @@
 					@Html.DisplayFor(modelItem => item.Price)
 				</td>
 				<td>
-					<img src="/@item.Pictuers?.FirstOrDefault()" />
+					<img width="50" src="/@item.Pictuers?.FirstOrDefault().Image" />
 				</td>
 				<td>
-					<button class="btn btn-info" onClick='addToCart(@item.Id)'>הוסף לעגלה</button>
+					@if (User.IsInRole(nameof(TypeUser.client)))
+					{
+						<button class="btn btn-info" onClick='addToCart(@item.Id)'>הוסף לעגלה</button>
+					}
 				</td>
 			</tr>
 		}
@@ -61,8 +50,8 @@
 	</tbody>
 </table>
 <div>
-	<a asp-action="Edit" asp-route-id="@Model.CategoryId">Edit</a> |
-	<a asp-action="Index">Back to List</a>
+	@*<a asp-action="Edit" asp-route-id="@Model.CategoryId">Edit</a> |*@
+	<a asp-action="Index">חזור לקטגוריות</a>
 </div>
 
 

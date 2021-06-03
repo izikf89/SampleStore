@@ -33,6 +33,9 @@ namespace WebApplication2.Controllers
                 return NotFound();
             }
 
+            var a = _context.Prodact.Include(x => x.Pictuers).First();
+
+
             var product = await _context.Prodact
                 .FirstOrDefaultAsync(m => m.Id == id);
             if (product == null)

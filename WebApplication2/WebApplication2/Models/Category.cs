@@ -15,10 +15,10 @@ namespace WebApplication2.Models
         public int CategoryId { get; set; }
 
         [DisplayName("שם")]
-        [Required]
+        [Required(ErrorMessage = "בחר שם")]
         public string Name { get; set; }
 
-        [Required(ErrorMessage = "בחר תמונה")]        
+        //[Required(ErrorMessage = "בחר תמונה")]        
         [NotMapped]
         public IFormFile img { get; set; }
 
@@ -27,7 +27,7 @@ namespace WebApplication2.Models
 
         public List<Product> Prodacts { get; set; } = new List<Product>(); //M2M
 
-        [Required(ErrorMessage = "בחר מוצר")]
+        //[Required(ErrorMessage = "בחר מוצר")]
         [DisplayName("בחר מוצר")]
         [NotMapped]
         public List<int> ProductIdList { get; set; } //M2M

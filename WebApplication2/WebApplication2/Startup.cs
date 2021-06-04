@@ -38,8 +38,8 @@ namespace WebApplication2
 
             services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme).AddCookie(opt =>
             {
-                opt.LoginPath = "/";
-                opt.AccessDeniedPath = "/";
+                opt.LoginPath = "/Clients/Login";
+                opt.AccessDeniedPath = "/Clients/Login";
             });
         }
 

@@ -18,6 +18,7 @@ namespace WebApplication2.Models
         public string Image { get; set; }
 
         [Required(ErrorMessage = "בחר תמונה")]
+        [DisplayName("תמונה")]
         [NotMapped]
         public IFormFile img { get; set; }
 

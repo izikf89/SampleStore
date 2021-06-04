@@ -24,12 +24,7 @@ namespace WebApplication2.Controllers
         }
 
 
-
-        public IActionResult Login()
-        {
-            return View();
-        }
-
+        public IActionResult Login() => View();
 
 
         // POST: Users/Create
@@ -48,19 +43,13 @@ namespace WebApplication2.Controllers
                 User userFound = q.First();
                 user.Type = q.First().Type;
                 Signin(userFound);
-                //HttpContext.Session.SetString("user", q.First().Name);
+
                 return RedirectToAction(nameof(Index), "Home");
             }
             else
             {
                 ViewBag.error = "Name or password not correct!";
             }
-
-            //if (ModelState.IsValid)
-            //{
-            //    _context.Add(user);
-            //    await _context.SaveChangesAsync();
-            //}
             return View(user);
         }
 
@@ -114,26 +103,17 @@ namespace WebApplication2.Controllers
                     select a;
 
             if (q.Count() > 0)
-            {
                 ViewBag.error = "Name alredy exist!";
-                //HttpContext.Session.SetString("user", q.First().Name);
-                
-            }
             else
             {
                 _context.Add(client);
                 await _context.SaveChangesAsync();
 
                 Signin(client);
-                //HttpContext.Session.SetString("user", q.First().Name);
-                return RedirectToAction(nameof(Index), nameof(HomeController));
 
-
+                return RedirectToAction(nameof(Index), "Home");
             }
 
-            //if (ModelState.IsValid)
-            //{
-            //}
             return View(client);
         }
 

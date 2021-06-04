@@ -17,7 +17,7 @@
     {
         <div class="item-container">
             <div class="item">
-                <img class="item-image" src="/@item.Pictuers?.FirstOrDefault().Image" />
+                <img class="item-image" src="/@item.Pictuers?.FirstOrDefault()?.Image" />
                 <div class="item-details">
                     <div class="item-name">
                         <span>@Html.DisplayFor(modelItem => item.Name)</span>

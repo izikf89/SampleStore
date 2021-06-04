@@ -60,7 +60,7 @@
 					@Html.DisplayFor(modelItem => item.Price)
 				</td>
 				<td>
-					<img width="50" src="/@item.Pictuers?.FirstOrDefault().Image" />
+					<img width="50" src="/@item.Pictuers?.FirstOrDefault()?.Image" />
 				</td>
 				<td>
 					<a class="btn btn-danger" asp-action="DleleteFromCart" asp-route-productId="@item.Id" asp-route-orderId="@Model.Id">הסר</a>
